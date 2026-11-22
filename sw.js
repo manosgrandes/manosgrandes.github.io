@@ -1,0 +1,59 @@
+// Service worker: permite usar el sitio sin internet (juegos, cuentos, guías).
+// Al cambiar archivos del sitio, sube el número de VERSION para que se actualicen.
+
+const VERSION = 'mgdc-v1';
+const ARCHIVOS = [
+  './', 'index.html', 'manifest.webmanifest', 'css/styles.css',
+  'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/cepillo.svg',
+  'js/app.js', 'js/character.js', 'js/cloud.js', 'js/config.js', 'js/ics.js', 'js/idb.js', 'js/importer.js',
+  'js/speech.js', 'js/store.js', 'js/util.js',
+  'js/data/articulos.js', 'js/data/cuentos.js',
+  'js/games/alimentos.js', 'js/games/bacterias.js', 'js/games/cepillado.js', 'js/games/comun.js', 'js/games/memoria.js', 'js/games/quiz.js',
+  'js/views/admin.js', 'js/views/articulo.js', 'js/views/contacto.js', 'js/views/cuenta.js', 'js/views/cuento-nuevo.js',
+  'js/views/cuentos.js', 'js/views/docentes.js', 'js/views/foro.js', 'js/views/inicio.js', 'js/views/juego.js',
+  'js/views/juegos.js', 'js/views/lector.js', 'js/views/padres.js', 'js/views/perfil.js', 'js/views/privacidad.js',
+  'js/views/recordatorios.js',
+];
+const CDN = ['cdn.jsdelivr.net', 'esm.sh'];
+
+self.addEventListener('install', (e) => {
+  // cache: 'reload' evita copiar versiones viejas guardadas por el navegador.
+  e.waitUntil(caches.open(VERSION)
+    .then((c) => c.addAll(ARCHIVOS.map((u) => new Request(u, { cache: 'reload' }))))
+    .then(() => self.skipWaiting()));
+});
+
+self.addEventListener('activate', (e) => {
+  e.waitUntil(caches.keys()
+    .then((claves) => Promise.all(claves.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
+    .then(() => self.clients.claim()));
+});
+
+self.addEventListener('fetch', (e) => {
+  const req = e.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+
+  // Archivos del propio sitio: responde rápido desde caché y actualiza en segundo plano.
+  if (url.origin === location.origin) {
+    e.respondWith(caches.open(VERSION).then(async (cache) => {
+      const guardada = await cache.match(req, { ignoreSearch: true });
+      const red = fetch(req.url, { cache: 'no-cache' }).then((r) => { if (r.ok) cache.put(req, r.clone()); return r; }).catch(() => guardada);
+      return guardada || red;
+    }));
+    return;
+  }
+
+  // Librerías de CDN (versiones fijas) e imágenes públicas de cuentos: caché primero.
+  const esImagenCuento = url.pathname.includes('/storage/v1/object/public/cuentos/');
+  if (CDN.includes(url.hostname) || esImagenCuento) {
+    e.respondWith(caches.open(`${VERSION}-ext`).then(async (cache) => {
+      const guardada = await cache.match(req);
+      if (guardada) return guardada;
+      const r = await fetch(req);
+      if (r.ok || r.type === 'opaque') cache.put(req, r.clone());
+      return r;
+    }));
+  }
+  // Todo lo demás (API de Supabase, analítica, YouTube) va directo a la red.
+});
