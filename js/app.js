@@ -1,86 +1,77 @@
-// Punto de entrada: enrutador por hash (#/ruta), compatible con cualquier hosting estático.
+// Enrutador por capas (funciona en cualquier hosting estático, usa #/ruta):
+//
+//   Capa 1 · Landing   #/            Presentación pública con Sofi.
+//   Capa 2 · Login     #/entrar      Elegir quién entra (niño, docente/familia, invitado).
+//   Capa 3 · Sistema   #/app/...     Módulos. Protegido: sin sesión redirige al login.
+//   Público            #/privacidad  Política de privacidad.
 
 import { CONFIG, nubeActiva } from './config.js';
-import { perfiles, sincronizarPendientes } from './store.js';
-import { detener } from './speech.js';
-import { esc, $ } from './util.js';
+import { sincronizarPendientes } from './nucleo/store.js';
+import { sesion } from './nucleo/sesion.js';
+import { detener } from './nucleo/speech.js';
+import { esc } from './nucleo/util.js';
 
-const RUTAS = [
-  [/^\/?$/, () => import('./views/landing.js')],
-  [/^\/inicio$/, () => import('./views/inicio.js')],
-  [/^\/entrar$/, () => import('./views/entrar.js')],
-  [/^\/perfil$/, () => import('./views/perfil.js')],
-  [/^\/juegos$/, () => import('./views/juegos.js')],
-  [/^\/juegos\/([\w-]+)$/, () => import('./views/juego.js')],
-  [/^\/cuentos$/, () => import('./views/cuentos.js')],
-  [/^\/cuentos\/nuevo$/, () => import('./views/cuento-nuevo.js')],
-  [/^\/cuentos\/(local|nube|base)\/([\w-]+)$/, () => import('./views/lector.js')],
-  [/^\/padres$/, () => import('./views/padres.js')],
-  [/^\/padres\/([\w-]+)$/, () => import('./views/articulo.js')],
-  [/^\/docentes$/, () => import('./views/docentes.js')],
-  [/^\/recordatorios$/, () => import('./views/recordatorios.js')],
-  [/^\/foro$/, () => import('./views/foro.js')],
-  [/^\/foro\/([\w-]+)$/, () => import('./views/foro.js')],
-  [/^\/contacto$/, () => import('./views/contacto.js')],
-  [/^\/cuenta$/, () => import('./views/cuenta.js')],
-  [/^\/admin$/, () => import('./views/admin.js')],
-  [/^\/privacidad$/, () => import('./views/privacidad.js')],
-];
-
-const app = $('#app');
+const raiz = document.getElementById('raiz');
 let limpiar = null;
+let capaActual = null;
+
+const ruta = () => decodeURIComponent(location.hash.replace(/^#/, '').split('?')[0]) || '/';
 
 async function navegar() {
-  const ruta = decodeURIComponent(location.hash.replace(/^#/, '').split('?')[0]) || '/';
+  const r = ruta();
   detener();
-  if (typeof limpiar === 'function') limpiar();
+  if (typeof limpiar === 'function') { try { limpiar(); } catch { /* vista ya desmontada */ } }
   limpiar = null;
 
-  const encontrada = RUTAS.find(([re]) => re.test(ruta));
-  const seccion = ruta.split('/')[1] || 'portada';
-  document.body.dataset.seccion = seccion;
-  document.querySelectorAll('.menu a').forEach((a) => a.classList.toggle('activo', a.dataset.sec === seccion));
-  $('#menu').classList.remove('abierto');
-  $('.menu-btn').setAttribute('aria-expanded', 'false');
-
-  if (!encontrada) {
-    app.innerHTML = `<section class="tarjeta centro"><h1>Página no encontrada</h1><p><a class="btn" href="#/">Volver al inicio</a></p></section>`;
-    return;
-  }
-  const params = ruta.match(encontrada[0]).slice(1);
   try {
-    const vista = await encontrada[1]();
-    app.innerHTML = '';
-    limpiar = await vista.render(app, params);
+    if (r === '/' || r === '') return await capaSimple('landing', () => import('./capas/landing/landing.js'));
+    if (r === '/entrar') return await capaSimple('login', () => import('./capas/login/login.js'));
+    if (r === '/privacidad') return await capaSimple('publico', () => import('./capas/publico/privacidad.js'));
+    if (r === '/app' || r.startsWith('/app/')) return await capaSistema(r.slice(4));
+    location.replace('#/');
   } catch (e) {
     console.error(e);
-    app.innerHTML = `<section class="tarjeta"><h1>¡Ups!</h1><p>No pudimos cargar esta sección. ${navigator.onLine ? '' : 'Parece que no hay internet.'}</p><p class="suave chico">${esc(e.message)}</p><p><a class="btn" href="#/">Ir al inicio</a></p></section>`;
+    const destino = raiz.querySelector('#vista') || raiz;
+    destino.innerHTML = `<section class="tarjeta" style="margin:1rem"><h1>¡Ups!</h1><p>No pudimos cargar esta sección. ${navigator.onLine ? '' : 'Parece que no hay internet.'}</p><p class="suave chico">${esc(e.message)}</p><p><a class="btn" href="#/app">Volver</a></p></section>`;
   }
-  app.focus({ preventScroll: true });
+}
+
+/** Landing, login y páginas públicas: ocupan toda la pantalla. */
+async function capaSimple(nombre, cargar) {
+  const vista = await cargar();
+  capaActual = nombre;
+  document.body.dataset.capa = nombre;
+  document.title = 'Manos Grandes Dientes Chiquitos';
+  raiz.innerHTML = '';
+  limpiar = await vista.render(raiz, new URLSearchParams(location.hash.split('?')[1] || ''));
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
-function pintarChipPerfil() {
-  const p = perfiles.activo();
-  $('#chip-perfil').textContent = p ? `${p.avatar} ${p.apodo}` : '🙂 ¿Quién juega?';
+/** Sistema: verifica la sesión, monta el armazón una vez y pinta el módulo pedido. */
+async function capaSistema(resto) {
+  const s = sesion.actual();
+  if (!s) {
+    location.replace(`#/entrar?volver=${encodeURIComponent('/app' + resto)}`);
+    return;
+  }
+  const [shell, { resolver }] = await Promise.all([import('./capas/sistema/shell.js'), import('./capas/sistema/modulos.js')]);
+  const destino = resolver(resto);
+  if (!destino || !destino.modulo.roles.includes(s.tipo)) {
+    location.replace('#/app');
+    return;
+  }
+  if (capaActual !== 'sistema' || !shell.montado(raiz)) shell.montar(raiz);
+  capaActual = 'sistema';
+  document.body.dataset.capa = 'sistema';
+
+  const { contenido, vista } = shell.prepararVista(destino.modulo, destino.opciones);
+  const modulo = await destino.cargar();
+  limpiar = await modulo.render(vista, destino.params);
+  contenido.focus({ preventScroll: true });
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
-// Enlace "Saltar al contenido": no debe cambiar la ruta (#app no es una ruta).
-$('.saltar').addEventListener('click', (e) => { e.preventDefault(); app.focus(); });
-
-// Menú móvil
-$('.menu-btn').addEventListener('click', (e) => {
-  const abierto = $('#menu').classList.toggle('abierto');
-  e.currentTarget.setAttribute('aria-expanded', String(abierto));
-});
-
-// Estado de conexión
-const pintarRed = () => { $('#estado-red').hidden = navigator.onLine; };
-window.addEventListener('online', pintarRed);
-window.addEventListener('offline', pintarRed);
-
 window.addEventListener('hashchange', navegar);
-window.addEventListener('mgdc:cambio', pintarChipPerfil);
 
 // Estadísticas de visitas sin cookies (opcional)
 if (CONFIG.cloudflareAnalyticsToken) {
@@ -102,19 +93,18 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
-// Sesión de Supabase: al confirmar correo, vuelve a la cuenta.
+// Enlaces de correo de Supabase (confirmar cuenta / recuperar clave) llegan con ?code=...
 if (nubeActiva()) {
-  import('./cloud.js').then(({ nube }) => nube.alCambiarSesion((ev) => {
-    // Enlaces de correo (confirmar cuenta / recuperar clave) llegan con ?code=...
+  import('./nucleo/cloud.js').then(({ nube }) => nube.alCambiarSesion(async (ev) => {
     const venia = new URLSearchParams(location.search).has('code');
-    if (venia) history.replaceState(null, '', location.pathname + (ev === 'PASSWORD_RECOVERY' ? '#/cuenta?recuperar' : '#/cuenta'));
-    if (venia || ev === 'PASSWORD_RECOVERY') navegar();
+    if (!venia && ev !== 'PASSWORD_RECOVERY') return;
+    const u = await nube.usuario().catch(() => null);
+    if (u) sesion.iniciar('adulto', { nombre: u.nombre, rol: u.rol, nube: true });
+    history.replaceState(null, '', location.pathname + (ev === 'PASSWORD_RECOVERY' ? '#/app/cuenta?recuperar' : '#/app'));
+    navegar();
   })).catch(() => {});
 }
 
-import('./views/recordatorios.js').then((m) => m.vigilarRecordatorios());
-
-pintarChipPerfil();
-pintarRed();
+import('./modulos/recordatorios/index.js').then((m) => m.vigilarRecordatorios());
 sincronizarPendientes();
 navegar();

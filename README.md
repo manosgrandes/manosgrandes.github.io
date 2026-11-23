@@ -69,24 +69,47 @@ Luego abre http://localhost:5173. No funciona abriendo `index.html` con doble cl
 - `correoContacto`: último recurso; abre el programa de correo del visitante.
 - `cloudflareAnalyticsToken`: estadísticas de visitas sin cookies.
 
-## Estructura
+## Estructura: 3 capas
 
 ```
-index.html            Página única (enrutador por #/ruta, compatible con cualquier hosting estático)
-css/styles.css        Estilos
-js/app.js             Enrutador y arranque
-js/config.js          Configuración (nube, contacto, estadísticas)
-js/character.js       Dientín en SVG
-js/store.js           Perfiles, progreso y medallas (localStorage) + cola de envío a la nube
-js/cloud.js           Acceso a Supabase (solo se carga si está configurado)
-js/importer.js        Análisis de PDF / EPUB / TXT / fotos + OCR + sugerencia de tema y edad
-js/speech.js          Narración con la voz del navegador
-js/games/*.js         Juegos
-js/views/*.js         Pantallas
-js/data/*.js          Cuentos e información (editar aquí los textos)
-supabase/schema.sql   Base de datos, reglas de seguridad y almacenamiento
-sw.js                 Funcionamiento sin internet
+Capa 1 · Landing   #/            Presentación pública con Sofi (animada).
+Capa 2 · Login     #/entrar      Niña/niño (apodo), docente/familia o invitado.
+Capa 3 · Sistema   #/app/...     Módulos. Protegido: sin sesión redirige al login.
+Público            #/privacidad
 ```
+
+```
+index.html                    Página única; el enrutador decide qué capa mostrar
+css/
+  base.css                    Colores, botones, formularios (compartido)
+  landing.css                 Capa 1
+  login.css                   Capa 2
+  sistema.css                 Capa 3: menú de módulos, barra superior, tablero
+  modulos.css                 Estilos internos de los módulos (juegos, cuentos...)
+js/
+  app.js                      Enrutador por capas + protección del sistema
+  config.js                   Configuración (nube, contacto, estadísticas)
+  nucleo/                     Piezas compartidas
+    sesion.js                 Quién entró (niño, adulto, invitado)
+    store.js  idb.js          Perfiles, progreso, medallas y cuentos del dispositivo
+    cloud.js                  Supabase (solo si está configurado)
+    speech.js ics.js util.js  Voz, calendario, utilidades
+    character.js sofi.js      Personajes Dientín y Sofi
+  capas/
+    landing/landing.js        Capa 1
+    login/login.js            Capa 2
+    sistema/shell.js          Capa 3: armazón (menú lateral, barra, navegación móvil)
+    sistema/modulos.js        Registro de módulos: menú, permisos y rutas
+    sistema/inicio.js         Tablero de inicio
+    publico/privacidad.js
+  modulos/                    Un módulo por carpeta
+    juegos/  cuentos/  guias/  recordatorios/  docentes/
+    foro/  contacto/  perfil/  cuenta/  admin/
+supabase/schema.sql           Base de datos y reglas de seguridad
+sw.js                         Funcionamiento sin internet
+```
+
+**Agregar un módulo nuevo:** crea `js/modulos/<nombre>/index.js` con una función `render(vista)` y regístralo en `js/capas/sistema/modulos.js` (título, ícono, color, quién lo ve y sus rutas). Luego agrega el archivo a la lista de `sw.js` y sube `VERSION`.
 
 ## Pendiente antes del lanzamiento oficial
 

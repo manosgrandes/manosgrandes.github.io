@@ -1,19 +1,21 @@
 // Service worker: permite usar el sitio sin internet (juegos, cuentos, guías).
 // Al cambiar archivos del sitio, sube el número de VERSION para que se actualicen.
 
-const VERSION = 'mgdc-v3';
+const VERSION = 'mgdc-v4';
 const ARCHIVOS = [
-  './', 'index.html', 'manifest.webmanifest', 'css/styles.css',
-  'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/cepillo.svg',
-  'img/sofi.webp', 'img/sofi-cara.webp',
-  'js/app.js', 'js/character.js', 'js/cloud.js', 'js/config.js', 'js/ics.js', 'js/idb.js', 'js/importer.js',
-  'js/speech.js', 'js/store.js', 'js/util.js',
-  'js/data/articulos.js', 'js/data/cuentos.js',
-  'js/games/alimentos.js', 'js/games/bacterias.js', 'js/games/cepillado.js', 'js/games/comun.js', 'js/games/memoria.js', 'js/games/quiz.js',
-  'js/views/admin.js', 'js/views/landing.js', 'js/views/entrar.js', 'js/views/articulo.js', 'js/views/contacto.js', 'js/views/cuenta.js', 'js/views/cuento-nuevo.js',
-  'js/views/cuentos.js', 'js/views/docentes.js', 'js/views/foro.js', 'js/views/inicio.js', 'js/views/juego.js',
-  'js/views/juegos.js', 'js/views/lector.js', 'js/views/padres.js', 'js/views/perfil.js', 'js/views/privacidad.js',
-  'js/views/recordatorios.js',
+  './', 'index.html', 'manifest.webmanifest', 'css/base.css', 'css/landing.css', 'css/login.css', 'css/modulos.css',
+  'css/sistema.css', 'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
+  'icons/cepillo.svg', 'img/sofi.webp', 'img/sofi-cara.webp', 'js/app.js', 'js/capas/landing/landing.js',
+  'js/capas/login/login.js', 'js/capas/publico/privacidad.js', 'js/capas/sistema/inicio.js', 'js/capas/sistema/modulos.js',
+  'js/capas/sistema/shell.js', 'js/config.js', 'js/modulos/admin/index.js', 'js/modulos/contacto/index.js',
+  'js/modulos/cuenta/index.js', 'js/modulos/cuentos/datos.js', 'js/modulos/cuentos/editor.js', 'js/modulos/cuentos/importer.js',
+  'js/modulos/cuentos/index.js', 'js/modulos/cuentos/lector.js', 'js/modulos/docentes/index.js', 'js/modulos/foro/index.js',
+  'js/modulos/guias/articulo.js', 'js/modulos/guias/datos.js', 'js/modulos/guias/index.js', 'js/modulos/juegos/games/alimentos.js',
+  'js/modulos/juegos/games/bacterias.js', 'js/modulos/juegos/games/cepillado.js', 'js/modulos/juegos/games/comun.js',
+  'js/modulos/juegos/games/memoria.js', 'js/modulos/juegos/games/quiz.js', 'js/modulos/juegos/index.js',
+  'js/modulos/juegos/juego.js', 'js/modulos/perfil/index.js', 'js/modulos/recordatorios/index.js', 'js/nucleo/character.js',
+  'js/nucleo/cloud.js', 'js/nucleo/ics.js', 'js/nucleo/idb.js', 'js/nucleo/sesion.js', 'js/nucleo/sofi.js',
+  'js/nucleo/speech.js', 'js/nucleo/store.js', 'js/nucleo/util.js',
 ];
 const CDN = ['cdn.jsdelivr.net', 'esm.sh'];
 

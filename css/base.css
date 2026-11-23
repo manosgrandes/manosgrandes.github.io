@@ -1,0 +1,129 @@
+/* Manos Grandes Dientes Chiquitos — base compartida por las 3 capas */
+:root {
+  --cielo: #4FC3F7;
+  --cielo-claro: #E3F6FD;
+  --menta: #4CC38A;
+  --menta-claro: #E2F8EC;
+  --coral: #FF7A85;
+  --coral-claro: #FFE8EA;
+  --sol: #FFD166;
+  --sol-claro: #FFF6DB;
+  --lila: #9B8CFF;
+  --lila-claro: #EFEBFF;
+  --tinta: #23305A;
+  --tinta-suave: #56618A;
+  --fondo: #F7FBFF;
+  --blanco: #fff;
+  --radio: 22px;
+  --sombra: 0 6px 0 rgba(35, 48, 90, .12), 0 12px 28px rgba(35, 48, 90, .08);
+  --fuente: ui-rounded, "Nunito", "Segoe UI Rounded", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --letra: 1.08rem;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; font-family: var(--fuente); font-size: var(--letra); line-height: 1.55; color: var(--tinta);
+  background: var(--fondo) radial-gradient(circle at 10% 0%, #DDF3FC 0, transparent 40%) no-repeat;
+  min-height: 100vh; display: flex; flex-direction: column;
+}
+img, svg { max-width: 100%; }
+a { color: #1677B8; }
+h1, h2, h3 { line-height: 1.2; margin: .2em 0 .5em; }
+h1 { font-size: clamp(1.8rem, 4.5vw, 2.8rem); }
+h2 { font-size: clamp(1.4rem, 3.2vw, 2rem); }
+:focus-visible { outline: 4px solid var(--sol); outline-offset: 3px; border-radius: 8px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.saltar { position: absolute; left: -999px; top: 0; background: var(--tinta); color: #fff; padding: .6em 1em; z-index: 99; }
+.saltar:focus { left: 8px; }
+
+
+/* ---------- Elementos comunes ---------- */
+.tarjeta { background: var(--blanco); border-radius: var(--radio); box-shadow: var(--sombra); padding: clamp(1rem, 2.5vw, 1.6rem); }
+.rejilla { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+.rejilla-2 { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.pila > * + * { margin-top: 1rem; }
+.fila { display: flex; gap: .7rem; flex-wrap: wrap; align-items: center; }
+.entre { justify-content: space-between; }
+.suave { color: var(--tinta-suave); }
+.chico { font-size: .9rem; }
+.centro { text-align: center; }
+.oculto { display: none !important; }
+
+.btn {
+  font: inherit; font-weight: 800; border: 0; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: .45rem;
+  padding: .75rem 1.3rem; border-radius: 999px; background: var(--cielo); color: #06324A; box-shadow: 0 4px 0 #2A9BCB;
+  transition: transform .1s, box-shadow .1s; min-height: 48px;
+}
+.btn:hover { filter: brightness(1.05); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #2A9BCB; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn-menta { background: var(--menta); color: #053A22; box-shadow: 0 4px 0 #2F9C68; }
+.btn-coral { background: var(--coral); color: #4A0A10; box-shadow: 0 4px 0 #D6505C; }
+.btn-sol { background: var(--sol); color: #4A3500; box-shadow: 0 4px 0 #D9A93A; }
+.btn-claro { background: var(--blanco); color: var(--tinta); box-shadow: 0 4px 0 #CCD6EA; border: 2px solid #E1E8F5; }
+.btn-mini { padding: .35rem .8rem; min-height: 36px; font-size: .9rem; background: var(--cielo-claro); box-shadow: none; color: var(--tinta); }
+.btn-grande { font-size: 1.25rem; padding: 1rem 1.8rem; }
+
+.etiqueta { display: inline-block; font-size: .8rem; font-weight: 800; padding: .15rem .65rem; border-radius: 999px; background: var(--cielo-claro); }
+.e-higiene { background: var(--cielo-claro); }
+.e-alimentacion { background: var(--menta-claro); }
+.e-familia { background: var(--coral-claro); }
+.e-otro { background: var(--lila-claro); }
+.estrellas { color: #F4A900; letter-spacing: .1em; font-size: 1.2em; }
+
+/* Formularios */
+label { font-weight: 700; display: block; margin-bottom: .25rem; }
+input, select, textarea {
+  font: inherit; width: 100%; padding: .7rem .9rem; border: 2px solid #D5DEEF; border-radius: 14px; background: #fff; color: var(--tinta);
+}
+input:focus, select:focus, textarea:focus { border-color: var(--cielo); outline: none; box-shadow: 0 0 0 4px var(--cielo-claro); }
+input[type=checkbox], input[type=radio] { width: auto; transform: scale(1.3); margin-right: .5rem; }
+.campo { margin-bottom: 1rem; }
+.check { display: flex; align-items: flex-start; gap: .3rem; font-weight: 600; }
+.ayuda { font-size: .88rem; color: var(--tinta-suave); margin-top: .25rem; }
+
+/* Avisos */
+#avisos { position: fixed; right: 1rem; bottom: 1rem; z-index: 100; display: flex; flex-direction: column; gap: .5rem; }
+.aviso { background: var(--tinta); color: #fff; padding: .8rem 1.1rem; border-radius: 16px; box-shadow: var(--sombra); transition: opacity .4s, transform .4s; max-width: 340px; }
+.aviso-mal { background: #B3261E; }
+.aviso.saliendo { opacity: 0; transform: translateY(10px); }
+.nota { border-left: 6px solid var(--sol); background: var(--sol-claro); padding: .9rem 1rem; border-radius: 12px; }
+.nota-info { border-color: var(--cielo); background: var(--cielo-claro); }
+.nota-mal { border-color: var(--coral); background: var(--coral-claro); }
+
+/* Íconos propios para emojis que no existen en equipos viejos */
+.emo { width: 1em; height: 1em; vertical-align: -.12em; display: inline-block; }
+.carta .emo { visibility: hidden; }
+.carta.volteada .emo, .carta.hecha .emo { visibility: visible; }
+
+/* ---------- Dientín ---------- */
+.dientin { display: block; }
+.rebote { animation: rebote 2.4s ease-in-out infinite; }
+@keyframes rebote { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
+.dientin-dice { display: flex; align-items: center; gap: 1rem; }
+.burbuja { position: relative; background: #fff; border: 3px solid var(--tinta); border-radius: 22px; padding: .9rem 1.1rem; margin: 0; font-weight: 700; box-shadow: var(--sombra); }
+.burbuja::before { content: ""; position: absolute; left: -14px; top: 50%; border: 10px solid transparent; border-right-color: var(--tinta); transform: translateY(-50%); }
+
+
+/* Confeti */
+.confeti { position: fixed; top: -40px; font-size: 2rem; z-index: 90; pointer-events: none; animation: caer 2.4s ease-in forwards; }
+@keyframes caer { to { transform: translateY(110vh) rotate(540deg); } }
+
+/* Accesibilidad: reducir movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
+/* Impresión (guías y calendario) */
+@media print {
+  .sis-lateral, .sis-barra, .sis-tabbar, .mod-cabecera, .no-imprimir, #avisos { display: none !important; }
+  body { background: #fff; }
+  main { padding: 0; }
+  .tarjeta { box-shadow: none; border: 1px solid #ccc; }
+}
+
+
+/* Páginas públicas sueltas (privacidad) */
+.pub-cabecera { display: flex; justify-content: space-between; align-items: center; padding: 1rem clamp(1rem, 4vw, 3rem); }
+.pub-articulo { margin: 1rem auto 3rem; width: min(820px, 100% - 2rem); }
