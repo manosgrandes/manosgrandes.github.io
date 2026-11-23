@@ -1,15 +1,16 @@
 // Service worker: permite usar el sitio sin internet (juegos, cuentos, guías).
 // Al cambiar archivos del sitio, sube el número de VERSION para que se actualicen.
 
-const VERSION = 'mgdc-v1';
+const VERSION = 'mgdc-v2';
 const ARCHIVOS = [
   './', 'index.html', 'manifest.webmanifest', 'css/styles.css',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/cepillo.svg',
+  'img/sofi.webp', 'img/sofi-cara.webp',
   'js/app.js', 'js/character.js', 'js/cloud.js', 'js/config.js', 'js/ics.js', 'js/idb.js', 'js/importer.js',
   'js/speech.js', 'js/store.js', 'js/util.js',
   'js/data/articulos.js', 'js/data/cuentos.js',
   'js/games/alimentos.js', 'js/games/bacterias.js', 'js/games/cepillado.js', 'js/games/comun.js', 'js/games/memoria.js', 'js/games/quiz.js',
-  'js/views/admin.js', 'js/views/articulo.js', 'js/views/contacto.js', 'js/views/cuenta.js', 'js/views/cuento-nuevo.js',
+  'js/views/admin.js', 'js/views/landing.js', 'js/views/entrar.js', 'js/views/articulo.js', 'js/views/contacto.js', 'js/views/cuenta.js', 'js/views/cuento-nuevo.js',
   'js/views/cuentos.js', 'js/views/docentes.js', 'js/views/foro.js', 'js/views/inicio.js', 'js/views/juego.js',
   'js/views/juegos.js', 'js/views/lector.js', 'js/views/padres.js', 'js/views/perfil.js', 'js/views/privacidad.js',
   'js/views/recordatorios.js',

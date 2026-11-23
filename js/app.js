@@ -6,7 +6,9 @@ import { detener } from './speech.js';
 import { esc, $ } from './util.js';
 
 const RUTAS = [
-  [/^\/?$/, () => import('./views/inicio.js')],
+  [/^\/?$/, () => import('./views/landing.js')],
+  [/^\/inicio$/, () => import('./views/inicio.js')],
+  [/^\/entrar$/, () => import('./views/entrar.js')],
   [/^\/perfil$/, () => import('./views/perfil.js')],
   [/^\/juegos$/, () => import('./views/juegos.js')],
   [/^\/juegos\/([\w-]+)$/, () => import('./views/juego.js')],
@@ -35,7 +37,8 @@ async function navegar() {
   limpiar = null;
 
   const encontrada = RUTAS.find(([re]) => re.test(ruta));
-  const seccion = ruta.split('/')[1] || 'inicio';
+  const seccion = ruta.split('/')[1] || 'portada';
+  document.body.dataset.seccion = seccion;
   document.querySelectorAll('.menu a').forEach((a) => a.classList.toggle('activo', a.dataset.sec === seccion));
   $('#menu').classList.remove('abierto');
   $('.menu-btn').setAttribute('aria-expanded', 'false');
@@ -54,13 +57,16 @@ async function navegar() {
     app.innerHTML = `<section class="tarjeta"><h1>¡Ups!</h1><p>No pudimos cargar esta sección. ${navigator.onLine ? '' : 'Parece que no hay internet.'}</p><p class="suave chico">${esc(e.message)}</p><p><a class="btn" href="#/">Ir al inicio</a></p></section>`;
   }
   app.focus({ preventScroll: true });
-  window.scrollTo(0, 0);
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function pintarChipPerfil() {
   const p = perfiles.activo();
   $('#chip-perfil').textContent = p ? `${p.avatar} ${p.apodo}` : '🙂 ¿Quién juega?';
 }
+
+// Enlace "Saltar al contenido": no debe cambiar la ruta (#app no es una ruta).
+$('.saltar').addEventListener('click', (e) => { e.preventDefault(); app.focus(); });
 
 // Menú móvil
 $('.menu-btn').addEventListener('click', (e) => {
