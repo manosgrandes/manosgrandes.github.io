@@ -217,7 +217,8 @@ export function render(raiz, params) {
             });
             if (r.session) {
               const yo = await nube.usuario();
-              entrar('adulto', { nombre: yo.nombre, rol: yo.rol, nube: true }, '¡Cuenta creada!');
+              entrar('adulto', { nombre: yo.nombre, rol: yo.rol, nube: true },
+                yo.rol === 'docente' && !yo.aprobado ? '¡Cuenta creada! Un administrador debe aprobarla para que puedas crear aulas.' : '¡Cuenta creada!');
             } else {
               aviso('¡Cuenta creada! Revisa tu correo para confirmarla y luego inicia sesión.');
               modo = 'entrar';

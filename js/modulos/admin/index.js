@@ -18,8 +18,8 @@ export async function render(app) {
   }
 
   const pintar = async () => {
-    const [stats, pendientes, reportados, mensajes] = await Promise.all([
-      nube.estadisticas(), nube.cuentosPendientes(), nube.reportados(), nube.mensajes(),
+    const [stats, pendientes, reportados, mensajes, docentes] = await Promise.all([
+      nube.estadisticas(), nube.cuentosPendientes(), nube.reportados(), nube.mensajes(), nube.docentesPendientes().catch(() => []),
     ]);
     app.innerHTML = `
     <section class="rejilla" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
@@ -29,6 +29,15 @@ export async function render(app) {
     <details class="tarjeta" style="margin-top:1rem"><summary>Actividades por juego</summary>
       <ul>${Object.entries(stats.por_actividad || {}).sort((a, b) => b[1] - a[1]).slice(0, 20).map(([k, v]) => `<li>${esc(JUEGOS[k] || k)}: ${v}</li>`).join('') || '<li>Sin datos</li>'}</ul>
     </details>
+
+    <section class="tarjeta pila" style="margin-top:1.5rem" id="docentes-pendientes">
+      <h2>👩‍🏫 Docentes por aprobar (${docentes.length})</h2>
+      <p class="suave chico">Verifica que sea un docente real (por ejemplo, por su correo institucional) antes de aprobarlo. Si lo rechazas, su cuenta queda como "familia".</p>
+      ${docentes.map((d) => `<div class="fila entre" style="border-bottom:1px solid #EAF0FA;padding:.5rem 0">
+        <div><strong>${esc(d.nombre || 'Sin nombre')}</strong> <span class="suave chico">· ${esc(d.correo)} · ${fechaCorta(d.creado)}</span></div>
+        <div class="fila"><button class="btn btn-mini btn-menta" data-docente-si="${d.id}">✅ Aprobar</button>
+          <button class="btn btn-mini btn-coral" data-docente-no="${d.id}">❌ Rechazar</button></div></div>`).join('') || '<p class="suave">No hay docentes pendientes.</p>'}
+    </section>
 
     <section class="tarjeta pila" style="margin-top:1.5rem">
       <h2>📚 Cuentos por aprobar (${pendientes.length})</h2>
@@ -57,6 +66,11 @@ export async function render(app) {
       <p class="ayuda">Para enviar el boletín, descarga la lista y usa un servicio gratuito como Brevo o MailerLite (plan gratis), o el correo normal con copia oculta.</p>
     </section>`;
 
+    app.querySelectorAll('[data-docente-si]').forEach((b) => b.addEventListener('click', async () => { await nube.aprobarDocente(b.dataset.docenteSi, true); aviso('Docente aprobado.'); pintar(); }));
+    app.querySelectorAll('[data-docente-no]').forEach((b) => b.addEventListener('click', async () => {
+      if (!confirm('¿Rechazar esta cuenta de docente? Quedará como cuenta de familia.')) return;
+      await nube.aprobarDocente(b.dataset.docenteNo, false); aviso('Cuenta cambiada a familia.'); pintar();
+    }));
     app.querySelectorAll('[data-aprobar]').forEach((b) => b.addEventListener('click', async () => { await nube.cambiarEstadoCuento(b.dataset.aprobar, 'aprobado'); aviso('Cuento publicado.'); pintar(); }));
     app.querySelectorAll('[data-rechazar]').forEach((b) => b.addEventListener('click', async () => { await nube.cambiarEstadoCuento(b.dataset.rechazar, 'rechazado'); aviso('Cuento rechazado.'); pintar(); }));
     app.querySelectorAll('[data-ocultar]').forEach((b) => b.addEventListener('click', async () => { const [t, id] = b.dataset.ocultar.split(':'); await nube.ocultar(t, id); pintar(); }));

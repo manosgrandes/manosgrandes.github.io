@@ -64,6 +64,12 @@ export async function render(app) {
     zona.innerHTML = `<section class="tarjeta pila"><h2>🏫 Mis aulas</h2><p>Inicia sesión con tu cuenta de docente para crear aulas y ver el avance de tus estudiantes.</p><p><a class="btn" href="#/entrar?como=adulto">Iniciar sesión o crear cuenta</a></p></section>`;
     return;
   }
+  if (u.rol === 'docente' && !u.aprobado) {
+    zona.innerHTML = `<section class="tarjeta pila"><h2>⏳ Tu cuenta de docente está en revisión</h2>
+      <p>Un administrador debe aprobarla antes de que puedas crear aulas. Mientras tanto puedes usar las guías, los cuentos, el foro y el seguimiento de este dispositivo.</p>
+      <p class="suave chico">Si ya te aprobaron, cierra sesión y vuelve a entrar.</p></section>`;
+    return;
+  }
   if (u.rol !== 'docente') {
     zona.innerHTML = `<p class="nota">Tu cuenta es de <strong>familia</strong>. Las aulas son para cuentas de docente.</p>`;
     return;

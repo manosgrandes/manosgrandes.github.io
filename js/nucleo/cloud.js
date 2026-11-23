@@ -46,9 +46,9 @@ export const nube = {
     const { data } = await c.auth.getSession();
     const user = data.session?.user;
     if (!user) return null;
-    const perfil = ok(await c.from('perfiles').select('nombre, rol').eq('id', user.id).maybeSingle());
+    const perfil = ok(await c.from('perfiles').select('nombre, rol, aprobado').eq('id', user.id).maybeSingle());
     const admin = ok(await c.rpc('es_admin'));
-    return { id: user.id, correo: user.email, nombre: perfil?.nombre || user.email, rol: perfil?.rol || 'familia', admin };
+    return { id: user.id, correo: user.email, nombre: perfil?.nombre || user.email, rol: perfil?.rol || 'familia', aprobado: perfil?.aprobado !== false, admin };
   },
   async registrar({ correo, clave, nombre, rol }) {
     const c = await sb();
@@ -225,6 +225,14 @@ export const nube = {
   async borrarMensaje(id) {
     const c = await sb();
     return ok(await c.from('contacto').delete().eq('id', id));
+  },
+  async docentesPendientes() {
+    const c = await sb();
+    return ok(await c.rpc('docentes_pendientes'));
+  },
+  async aprobarDocente(id, aprobar) {
+    const c = await sb();
+    return ok(await c.rpc('aprobar_docente', { p_id: id, p_aprobar: aprobar }));
   },
   async estadisticas() {
     const c = await sb();
