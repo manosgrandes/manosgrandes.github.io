@@ -58,6 +58,12 @@ Luego abre http://localhost:5173. No funciona abriendo `index.html` con doble cl
    ```
 6. Sube el número de `VERSION` en `sw.js` y publica.
 
+**Cuentas de docentes (configuración actual):**
+- En **Authentication → Sign In / Providers → User Signups**, **Confirm email** está apagado. El correo gratuito de Supabase solo envía unos pocos mensajes por hora y únicamente a los miembros del proyecto, así que con la confirmación activa los docentes no podrían registrarse.
+- En su lugar, cada cuenta nueva de **docente** queda **en revisión** hasta que un administrador la aprueba en **Administración → Docentes por aprobar**. Mientras tanto no puede crear aulas. Las cuentas de familia no requieren aprobación.
+- Si una base de datos ya existía antes de esta función, ejecuta `supabase/migracion-002-aprobacion-docentes.sql`.
+- "¿Olvidaste tu contraseña?" depende del correo. Sin un SMTP propio (por ejemplo, Brevo gratis), el administrador cambia la contraseña desde **Authentication → Users**.
+
 **Límites del plan gratuito de Supabase:**
 - 500 MB de base de datos.
 - 1 GB de archivos (las imágenes de los cuentos).
