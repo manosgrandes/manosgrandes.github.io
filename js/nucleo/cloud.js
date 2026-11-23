@@ -6,7 +6,7 @@ import { CONFIG, nubeActiva } from '../config.js';
 let clientePromesa;
 async function sb() {
   if (!nubeActiva()) throw new Error('La nube no está configurada.');
-  clientePromesa ??= import('https://esm.sh/@supabase/supabase-js@2.45.4').then(({ createClient }) =>
+  clientePromesa ??= import('https://esm.sh/@supabase/supabase-js@2.119.2').then(({ createClient }) =>
     createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey, { auth: { persistSession: true, flowType: 'pkce', detectSessionInUrl: true } }));
   return clientePromesa;
 }

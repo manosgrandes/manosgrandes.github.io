@@ -10,11 +10,11 @@ export const CONFIG = {
   nombreSitio: 'Manos Grandes Dientes Chiquitos',
 
   // --- Supabase (plan gratuito) ---
-  // Project Settings > API > Project URL y "anon public key".
-  // La anon key es pública por diseño; la seguridad la dan las políticas RLS
+  // Project Settings > API Keys: Project URL y "Publishable key" (o la "anon public" antigua).
+  // Esta clave es pública por diseño; la seguridad la dan las políticas RLS
   // definidas en supabase/schema.sql.
-  supabaseUrl: '',
-  supabaseAnonKey: '',
+  supabaseUrl: 'https://fuwwyhlxhlnxjiemvqsr.supabase.co',
+  supabaseAnonKey: 'sb_publishable_HLAPbHrfflTlgctF9z0HrQ_7_R0Xb_2',
 
   // --- Formulario de contacto sin Supabase (opcional) ---
   // Endpoint de Formspree (https://formspree.io), p. ej. 'https://formspree.io/f/abcdwxyz'.

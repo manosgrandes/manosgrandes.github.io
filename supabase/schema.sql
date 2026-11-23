@@ -209,6 +209,12 @@ alter table public.foro_temas enable row level security;
 alter table public.foro_respuestas enable row level security;
 alter table public.contacto enable row level security;
 
+-- Permisos base del API (las filas visibles las deciden las políticas RLS de abajo).
+grant usage on schema public to anon, authenticated;
+grant select, insert, update, delete on all tables in schema public to anon, authenticated;
+grant usage, select on all sequences in schema public to anon, authenticated;
+revoke all on public.admins from anon, authenticated;
+
 -- Perfiles: cada quien ve y edita el suyo (el rol no se puede cambiar desde el navegador).
 drop policy if exists perfiles_ver on public.perfiles;
 create policy perfiles_ver on public.perfiles for select using (id = auth.uid() or public.es_admin());
