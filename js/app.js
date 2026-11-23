@@ -93,6 +93,12 @@ if (CONFIG.cloudflareAnalyticsToken) {
 
 // Funciona sin internet (PWA)
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  // Cuando se publica una versión nueva, recarga una vez para mostrarla de inmediato.
+  const habiaVersion = Boolean(navigator.serviceWorker.controller);
+  let recargado = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (habiaVersion && !recargado) { recargado = true; location.reload(); }
+  });
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
