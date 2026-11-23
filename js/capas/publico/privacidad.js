@@ -1,11 +1,11 @@
 export function render(app) {
   app.innerHTML = `
   <header class="pub-cabecera">
-    <a class="lp-marca" href="#/"><img src="icons/icon.svg" alt="" width="40" height="40"><span><strong>Manos Grandes</strong><small>Dientes Chiquitos</small></span></a>
+    <a class="marca" href="#/"><img src="icons/icon.svg" alt="" width="38" height="38"><span><strong>Manos Grandes</strong><small>Dientes Chiquitos</small></span></a>
     <a class="btn btn-claro" href="javascript:history.back()">← Volver</a>
   </header>
   <article class="articulo tarjeta pub-articulo">
-    <h1>🔒 Privacidad y protección de datos</h1>
+    <h1>Privacidad y protección de datos</h1>
     <p class="nota chico">Plantilla base. Debe revisarla el responsable del sitio y ajustarla a la Ley 1581 de 2012 y sus decretos reglamentarios, indicando nombre, identificación y datos de contacto del responsable del tratamiento.</p>
     <h2>Niñas y niños</h2>
     <ul>

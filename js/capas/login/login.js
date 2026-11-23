@@ -8,7 +8,8 @@ import { sesion } from '../../nucleo/sesion.js';
 import { nubeActiva } from '../../config.js';
 import { esc, aviso, $ } from '../../nucleo/util.js';
 import { leer } from '../../nucleo/speech.js';
-import { SOFI } from '../../nucleo/sofi.js';
+import { sofiSaludando } from '../../nucleo/sofi.js';
+import { icono } from '../../nucleo/iconos.js';
 
 export function render(raiz, params) {
   const volver = params.get('volver');
@@ -18,38 +19,39 @@ export function render(raiz, params) {
 
   raiz.innerHTML = `
   <div class="lg">
-    <section class="lg-arte" aria-hidden="false">
-      <div class="lg-arte-fondo" aria-hidden="true"><span></span><span></span><span></span></div>
-      <a class="lg-volver" href="#/">← Volver a la página principal</a>
+    <section class="lg-arte">
+      <a class="marca marca-clara" href="#/"><img src="icons/icon.svg" alt="" width="38" height="38"><span><strong>Manos Grandes</strong><small>Dientes Chiquitos</small></span></a>
       <div class="lg-arte-txt">
-        <h2>¡Bienvenidos a<br><span>Manos Grandes Dientes Chiquitos</span>!</h2>
-        <p>Juegos, cuentos y guías para cuidar la sonrisa en familia y en el aula.</p>
+        <p class="lg-antetitulo">Bienvenidos</p>
+        <h2>Cuidar la sonrisa se aprende <span>juntos</span>.</h2>
+        <p>Juegos, cuentos y guías para niñas, niños, familias y docentes.</p>
       </div>
-      <img class="lg-sofi" src="${SOFI.img}" width="760" height="1633" alt="Sofi, la doctora de las sonrisas">
-      <div class="lg-globo"><img src="${SOFI.cara}" alt="" width="44" height="44" class="avatar-sofi"><p id="dice">¿Quién va a entrar hoy?</p></div>
+      <div class="lg-escena">
+        ${sofiSaludando({ clase: 'lg-sofi', alt: 'Sofi, la doctora de las sonrisas, saludando' })}
+        <div class="lg-globo" aria-live="polite"><p id="dice">¿Quién va a entrar hoy?</p></div>
+      </div>
     </section>
 
     <section class="lg-panel">
       <div class="lg-tarjeta">
-        <a class="lg-volver lg-volver-movil" href="#/">← Inicio</a>
+        <a class="lg-volver" href="#/">${icono('atras', { tam: 16 })} Volver al inicio</a>
         <header class="lg-cabeza">
-          <img src="icons/icon.svg" alt="" width="52" height="52">
-          <div><h1>Entrar</h1><p>Elige cómo quieres ingresar al sistema</p></div>
+          <h1>Entrar</h1><p>Elige cómo quieres ingresar al sistema.</p>
         </header>
 
-        ${actual ? `<a class="lg-continuar" href="${destino}"><span class="lg-continuar-ava">${esc(actual.avatar)}</span><span><small>Sesión abierta</small><strong>Continuar como ${esc(actual.nombre)}</strong></span><span aria-hidden="true">➜</span></a>` : ''}
+        ${actual ? `<a class="lg-continuar" href="${destino}"><span class="lg-continuar-ava">${esc(actual.avatar)}</span><span><small>Sesión abierta</small><strong>Continuar como ${esc(actual.nombre)}</strong></span>${icono('flecha', { tam: 18 })}</a>` : ''}
 
         <div class="lg-pestanas" role="tablist" aria-label="Tipo de ingreso">
           <span class="lg-indicador" aria-hidden="true"></span>
-          <button role="tab" id="tab-nino" aria-controls="panel-nino" data-p="nino">👧🧒 Niña o niño</button>
-          <button role="tab" id="tab-adulto" aria-controls="panel-adulto" data-p="adulto">👩‍🏫 Docente o familia</button>
+          <button role="tab" id="tab-nino" aria-controls="panel-nino" data-p="nino">${icono('invitado', { tam: 18 })} Niña o niño</button>
+          <button role="tab" id="tab-adulto" aria-controls="panel-adulto" data-p="adulto">${icono('escuela', { tam: 18 })} Docente o familia</button>
         </div>
 
         <div role="tabpanel" id="panel-nino" aria-labelledby="tab-nino" class="lg-contenido"></div>
         <div role="tabpanel" id="panel-adulto" aria-labelledby="tab-adulto" class="lg-contenido"></div>
 
         <div class="lg-separador"><span>o</span></div>
-        <button class="btn btn-claro lg-ancho" id="invitado">🙂 Explorar como invitado</button>
+        <button class="btn btn-claro lg-ancho" id="invitado">Explorar como invitado</button>
         <p class="lg-nota">Los niños no necesitan contraseña ni datos personales. <a href="#/privacidad">Privacidad</a></p>
       </div>
     </section>
@@ -75,7 +77,7 @@ export function render(raiz, params) {
       ${lista.length ? `<p class="lg-sub">Toca tu perfil</p>
         <div class="lg-perfiles">${lista.map((p, i) => `<button class="lg-perfil" data-id="${p.id}" style="--i:${i}">
           <span class="lg-perfil-ava">${esc(p.avatar)}</span><strong>${esc(p.apodo)}</strong><small>★ ${progreso.resumen(p.id).totalEstrellas}</small></button>`).join('')}
-          <button class="lg-perfil lg-perfil-nuevo" id="nuevo-perfil" style="--i:${lista.length}"><span class="lg-perfil-ava">➕</span><strong>Soy nuevo</strong><small>Crear perfil</small></button>
+          <button class="lg-perfil lg-perfil-nuevo" id="nuevo-perfil" style="--i:${lista.length}"><span class="lg-perfil-ava">${icono('mas', { tam: 24 })}</span><strong>Soy nuevo</strong><small>Crear perfil</small></button>
         </div>` : ''}
       <form id="form-nino" class="lg-form" ${lista.length ? 'hidden' : ''}>
         <p class="lg-sub">${lista.length ? 'Crea tu perfil' : '¡Crea tu perfil para empezar!'}</p>
@@ -85,7 +87,7 @@ export function render(raiz, params) {
           <div class="avatares">${AVATARES.map((a, i) => `<label><input type="radio" name="avatar" value="${a}" ${i === 0 ? 'checked' : ''}><span>${a}</span></label>`).join('')}</div>
         </fieldset>
         ${nubeActiva() ? '<label class="lg-campo"><span>Código del aula (opcional)</span><input id="aula" maxlength="6" placeholder="Te lo da tu profe" style="text-transform:uppercase"></label>' : ''}
-        <button class="btn btn-grande btn-menta lg-ancho">🚀 ¡Entrar a jugar!</button>
+        <button class="btn btn-grande lg-ancho">¡Entrar a jugar! ${icono('flecha', { tam: 18 })}</button>
         ${lista.length ? '<button type="button" class="btn btn-mini lg-ancho" id="cancelar-nuevo">Volver a los perfiles</button>' : ''}
       </form>`;
 
@@ -129,10 +131,10 @@ export function render(raiz, params) {
       <form id="form-local" class="lg-form">
         <label class="lg-campo"><span>¿Cómo te llamamos?</span><input id="nombre-local" required maxlength="40" placeholder="Ej.: Profe Marta" autocomplete="nickname"></label>
         <div class="lg-roles" role="radiogroup" aria-label="Soy">
-          <label><input type="radio" name="rol" value="docente" checked><span>👩‍🏫<b>Docente</b></span></label>
-          <label><input type="radio" name="rol" value="familia"><span>👨‍👩‍👧<b>Familia</b></span></label>
+          <label><input type="radio" name="rol" value="docente" checked><span>${icono('escuela', { tam: 22 })}<b>Docente</b></span></label>
+          <label><input type="radio" name="rol" value="familia"><span>${icono('guias', { tam: 22 })}<b>Familia</b></span></label>
         </div>
-        <button class="btn btn-grande lg-ancho">Entrar ➜</button>
+        <button class="btn btn-grande lg-ancho">Entrar ${icono('flecha', { tam: 18 })}</button>
       </form>`;
     const conectarLocal = () => $('#form-local', panel).addEventListener('submit', (e) => {
       e.preventDefault();
@@ -152,7 +154,7 @@ export function render(raiz, params) {
     const u = await nube.usuario().catch(() => null);
     if (u) {
       panel.innerHTML = `<p class="lg-sub">Ya iniciaste sesión</p>
-        <button class="btn btn-grande lg-ancho" id="seguir">Continuar como ${esc(u.nombre)} ➜</button>`;
+        <button class="btn btn-grande lg-ancho" id="seguir">Continuar como ${esc(u.nombre)} ${icono('flecha', { tam: 18 })}</button>`;
       $('#seguir', panel).addEventListener('click', () => entrar('adulto', { nombre: u.nombre, rol: u.rol, nube: true }));
       return;
     }
@@ -163,7 +165,7 @@ export function render(raiz, params) {
         <form id="form-nube" class="lg-form">
           <label class="lg-campo"><span>Correo</span><input id="correo" type="email" required autocomplete="email" placeholder="tucorreo@ejemplo.com"></label>
           <label class="lg-campo"><span>Contraseña</span>
-            <span class="lg-clave"><input id="clave" type="password" required autocomplete="current-password" placeholder="••••••••"><button type="button" id="ver" aria-label="Mostrar contraseña">👁️</button></span></label>
+            <span class="lg-clave"><input id="clave" type="password" required autocomplete="current-password" placeholder="••••••••"><button type="button" id="ver" aria-label="Mostrar contraseña">${icono('ojo', { tam: 20 })}</button></span></label>
           <button class="btn btn-grande lg-ancho">Iniciar sesión</button>
           <div class="lg-enlaces"><button type="button" id="olvide">¿Olvidaste tu contraseña?</button><button type="button" id="a-registro">Crear cuenta</button></div>
         </form>
@@ -172,13 +174,13 @@ export function render(raiz, params) {
         <form id="form-registro" class="lg-form">
           <label class="lg-campo"><span>Nombre para mostrar</span><input id="r-nombre" required maxlength="60" placeholder="Ej.: Profe Marta"></label>
           <div class="lg-roles" role="radiogroup" aria-label="Soy">
-            <label><input type="radio" name="rol" value="docente" checked><span>👩‍🏫<b>Docente</b></span></label>
-            <label><input type="radio" name="rol" value="familia"><span>👨‍👩‍👧<b>Familia</b></span></label>
+            <label><input type="radio" name="rol" value="docente" checked><span>${icono('escuela', { tam: 22 })}<b>Docente</b></span></label>
+            <label><input type="radio" name="rol" value="familia"><span>${icono('guias', { tam: 22 })}<b>Familia</b></span></label>
           </div>
           <label class="lg-campo"><span>Correo</span><input id="r-correo" type="email" required autocomplete="email"></label>
           <label class="lg-campo"><span>Contraseña (mínimo 8)</span><input id="r-clave" type="password" minlength="8" required autocomplete="new-password"></label>
           <label class="check"><input type="checkbox" required> Acepto la <a href="#/privacidad">política de privacidad</a> y soy mayor de edad.</label>
-          <button class="btn btn-grande btn-menta lg-ancho">Crear cuenta</button>
+          <button class="btn btn-grande lg-ancho">Crear cuenta</button>
           <div class="lg-enlaces"><button type="button" id="a-entrar">Ya tengo cuenta</button></div>
         </form>`;
 

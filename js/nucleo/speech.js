@@ -16,7 +16,7 @@ sintesis?.addEventListener?.('voiceschanged', () => {});
  * Lee un texto. `alPalabra(inicio, largo)` permite resaltar la palabra actual.
  * Devuelve una promesa que se resuelve al terminar o al detener.
  */
-export function leer(texto, { alPalabra, velocidad = 0.9 } = {}) {
+export function leer(texto, { alPalabra, velocidad = 0.9, tono = 1.1 } = {}) {
   if (!sintesis || !texto) return Promise.resolve();
   detener();
   return new Promise((ok) => {
@@ -25,7 +25,7 @@ export function leer(texto, { alPalabra, velocidad = 0.9 } = {}) {
     const voz = vozEspanol();
     if (voz) u.voice = voz;
     u.rate = velocidad;
-    u.pitch = 1.1;
+    u.pitch = tono;
     if (alPalabra) {
       u.onboundary = (e) => {
         if (e.name === 'word' || e.charLength) alPalabra(e.charIndex, e.charLength || (texto.slice(e.charIndex).match(/^\S+/)?.[0].length ?? 1));
