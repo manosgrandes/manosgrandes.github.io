@@ -92,7 +92,7 @@ export async function render(app) {
         aviso('¡Bienvenido!');
         pintar();
       } catch (err) {
-        aviso(/confirm/i.test(err.message) ? 'Primero confirma tu correo (revisa tu bandeja de entrada).' : 'Correo o contraseña incorrectos.', 'mal');
+        aviso(nube.mensajeError(err), 'mal');
       }
     });
     $('#registro', app).addEventListener('submit', async (e) => {
@@ -104,7 +104,7 @@ export async function render(app) {
         });
         if (r.session) { aviso('¡Cuenta creada!'); pintar(); }
         else aviso('¡Cuenta creada! Revisa tu correo para confirmarla.');
-      } catch (err) { aviso(`No se pudo crear la cuenta: ${err.message}`, 'mal'); }
+      } catch (err) { aviso(nube.mensajeError(err), 'mal'); }
     });
     $('#olvide', app).addEventListener('click', async () => {
       const correo = $('#e-correo', app).value.trim();

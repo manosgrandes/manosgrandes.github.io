@@ -11,6 +11,19 @@ async function sb() {
   return clientePromesa;
 }
 
+/** Traduce los errores de Supabase a mensajes claros en español. */
+export function mensajeError(err) {
+  const m = String(err?.message || err || '');
+  if (/rate limit|too many|security purposes/i.test(m)) return 'Se enviaron demasiados correos en poco tiempo. Espera una hora e inténtalo de nuevo, o pide al administrador que confirme tu cuenta.';
+  if (/already registered|already exists/i.test(m)) return 'Ese correo ya tiene una cuenta. Usa "Ya tengo cuenta" para iniciar sesión.';
+  if (/not confirmed|confirm/i.test(m)) return 'Primero confirma tu correo: abre el enlace que te enviamos.';
+  if (/invalid login|invalid credentials/i.test(m)) return 'Correo o contraseña incorrectos.';
+  if (/password/i.test(m)) return 'La contraseña no es válida: usa al menos 8 caracteres.';
+  if (/email/i.test(m) && /invalid/i.test(m)) return 'Ese correo no es válido.';
+  if (/fetch|network/i.test(m)) return 'No hay conexión con el servidor. Revisa tu internet.';
+  return m || 'Ocurrió un error inesperado.';
+}
+
 const ok = ({ data, error }) => {
   if (error) throw new Error(error.message);
   return data;
@@ -26,6 +39,7 @@ function dataURLaBlob(dataURL) {
 }
 
 export const nube = {
+  mensajeError,
   // ---------- Cuentas (docentes y familias) ----------
   async usuario() {
     const c = await sb();

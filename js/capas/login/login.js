@@ -200,7 +200,7 @@ export function render(raiz, params) {
             const yo = await nube.usuario();
             entrar('adulto', { nombre: yo.nombre, rol: yo.rol, nube: true }, `¡Bienvenido, ${yo.nombre}!`);
           } catch (err) {
-            aviso(/confirm/i.test(err.message) ? 'Primero confirma tu correo (revisa tu bandeja).' : 'Correo o contraseña incorrectos.', 'mal');
+            aviso(nube.mensajeError(err), 'mal');
             b.disabled = false;
           }
         });
@@ -223,7 +223,7 @@ export function render(raiz, params) {
               modo = 'entrar';
               pintarFormNube();
             }
-          } catch (err) { aviso(`No se pudo crear la cuenta: ${err.message}`, 'mal'); b.disabled = false; }
+          } catch (err) { aviso(nube.mensajeError(err), 'mal'); b.disabled = false; }
         });
       }
     };
