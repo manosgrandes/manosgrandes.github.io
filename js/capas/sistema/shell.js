@@ -10,6 +10,8 @@ import { SOFI } from '../../nucleo/sofi.js';
 
 let raizActual = null;
 let esAdmin = false;
+let pendientesAdmin = 0;
+let relojAvisos = null;
 
 export function montado(raiz) {
   return raizActual === raiz && raiz.querySelector('.sis');
@@ -98,11 +100,24 @@ export function montar(raiz) {
   if (s?.nube && nubeActiva()) {
     import('../../nucleo/cloud.js').then(({ nube }) => nube.usuario()).then((u) => {
       esAdmin = Boolean(u?.admin);
-      if (esAdmin) pintarMenu();
+      if (esAdmin) { pintarMenu(); revisarAvisos(); }
     }).catch(() => {});
   }
   pintarUsuario();
   pintarMenu();
+}
+
+/** Cuenta lo pendiente del administrador y lo muestra como globo en el menú (se revisa cada minuto). */
+export async function revisarAvisos() {
+  clearTimeout(relojAvisos);
+  if (!esAdmin || !raizActual?.isConnected) return;
+  try {
+    const { nube } = await import('../../nucleo/cloud.js');
+    const a = await nube.avisosAdmin();
+    pendientesAdmin = a.docentes + a.cuentos + a.reportes;
+    pintarMenu();
+  } catch { /* sin conexión: se reintenta */ }
+  relojAvisos = setTimeout(revisarAvisos, 60000);
 }
 
 let moduloActivo = 'inicio';
@@ -113,7 +128,7 @@ function pintarMenu() {
   if (!raiz || !s) return;
   const mods = modulosPara(s.tipo, esAdmin);
   const enlace = (m) => `<a href="#/app${m.id === 'inicio' ? '' : `/${m.id}`}" data-mod="${m.id}" style="--c:${m.color}" ${m.id === moduloActivo ? 'aria-current="page"' : ''}>
-      <span class="sis-ico">${m.icono}</span><span>${esc(m.corto || m.titulo)}</span></a>`;
+      <span class="sis-ico">${m.icono}</span><span>${esc(m.corto || m.titulo)}</span>${m.id === 'admin' && pendientesAdmin ? `<span class="sis-globo" aria-label="${pendientesAdmin} pendientes">${pendientesAdmin}</span>` : ''}</a>`;
   const grupos = Object.entries(GRUPOS).map(([g, nombre]) => {
     const lista = mods.filter((m) => m.grupo === g);
     return lista.length ? `<p class="sis-grupo">${nombre}</p>${lista.map(enlace).join('')}` : '';

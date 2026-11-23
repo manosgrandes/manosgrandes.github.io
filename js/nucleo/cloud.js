@@ -234,6 +234,11 @@ export const nube = {
     const c = await sb();
     return ok(await c.rpc('aprobar_docente', { p_id: id, p_aprobar: aprobar }));
   },
+  /** Pendientes del administrador: docentes por aprobar, cuentos por revisar y mensajes reportados del foro. */
+  async avisosAdmin() {
+    const [docentes, cuentos, rep] = await Promise.all([this.docentesPendientes(), this.cuentosPendientes(), this.reportados()]);
+    return { docentes: docentes.length, cuentos: cuentos.length, reportes: rep.temas.length + rep.resp.length };
+  },
   async estadisticas() {
     const c = await sb();
     return ok(await c.rpc('estadisticas_generales'));

@@ -6,6 +6,7 @@ import { perfiles, progreso, medallas, todasLasMedallas } from '../../nucleo/sto
 import { SOFI } from '../../nucleo/sofi.js';
 import { esc } from '../../nucleo/util.js';
 import { botonLeer } from '../../nucleo/speech.js';
+import { nubeActiva } from '../../config.js';
 
 const CONSEJOS = [
   'Cepíllate los dientes al menos dos veces al día. ¡El cepillado de la noche es el más importante!',
@@ -36,6 +37,7 @@ export function render(vista) {
   const mods = modulosPara(s.tipo).filter((m) => m.id !== 'inicio');
 
   vista.innerHTML = `
+  <div id="alerta-admin"></div>
   <section class="tab-bienvenida">
     <div>
       <h1>${saludo}, ${esc(id.nombre)} ${esc(id.avatar)}</h1>
@@ -70,4 +72,25 @@ export function render(vista) {
       <p style="margin-bottom:0">${s.tipo === 'invitado' ? 'Prueba un juego o un cuento. Para guardar estrellas, entra con un perfil.' : 'Lee la guía "Higiene bucal según la edad" y descarga los recordatorios para tu celular.'}</p>
     </section>`}
   </div>`;
+
+  if (s.nube && nubeActiva()) avisarAdmin(vista);
+}
+
+/** Si es administrador y hay pendientes, muestra un aviso arriba del tablero. */
+async function avisarAdmin(vista) {
+  try {
+    const { nube } = await import('../../nucleo/cloud.js');
+    const u = await nube.usuario();
+    if (!u?.admin) return;
+    const a = await nube.avisosAdmin();
+    const partes = [
+      a.docentes && `${a.docentes} docente${a.docentes > 1 ? 's' : ''} por aprobar`,
+      a.cuentos && `${a.cuentos} cuento${a.cuentos > 1 ? 's' : ''} por revisar`,
+      a.reportes && `${a.reportes} mensaje${a.reportes > 1 ? 's' : ''} reportado${a.reportes > 1 ? 's' : ''}`,
+    ].filter(Boolean);
+    const zona = vista.querySelector('#alerta-admin');
+    if (!partes.length || !zona) return;
+    zona.innerHTML = `<div class="tab-alerta" role="status"><span>🔔 Tienes pendiente: ${partes.join(' · ')}.</span>
+      <a class="btn btn-coral" href="#/app/admin">Revisar ahora</a></div>`;
+  } catch { /* sin conexión */ }
 }

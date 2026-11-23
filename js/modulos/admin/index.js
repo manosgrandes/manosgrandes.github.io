@@ -19,7 +19,7 @@ export async function render(app) {
 
   const pintar = async () => {
     const [stats, pendientes, reportados, mensajes, docentes] = await Promise.all([
-      nube.estadisticas(), nube.cuentosPendientes(), nube.reportados(), nube.mensajes(), nube.docentesPendientes().catch(() => []),
+      nube.estadisticas(), nube.cuentosPendientes(), nube.reportados(), nube.mensajes(), nube.docentesPendientes(),
     ]);
     app.innerHTML = `
     <section class="rejilla" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
