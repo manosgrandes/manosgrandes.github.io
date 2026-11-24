@@ -1,11 +1,11 @@
 // Service worker: permite usar el sitio sin internet (juegos, cuentos, guías).
 // Al cambiar archivos del sitio, sube el número de VERSION para que se actualicen.
 
-const VERSION = 'mgdc-v9';
+const VERSION = 'mgdc-v11';
 const ARCHIVOS = [
   './', 'index.html', 'manifest.webmanifest', 'css/base.css', 'css/landing.css', 'css/login.css', 'css/modulos.css',
   'css/sistema.css', 'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
-  'icons/cepillo.svg', 'img/sofi.webp', 'img/sofi-cuerpo.webp', 'img/sofi-brazo.webp', 'img/sofi-cara.webp', 'js/app.js', 'js/capas/landing/landing.js',
+  'icons/cepillo.svg', 'img/sofi.webp', 'img/sofi-cuerpo.webp', 'img/sofi-brazo.webp', 'img/sofi-cara.webp', 'img/sofi-busto.webp', 'img/dientin.webp', 'js/app.js', 'js/capas/landing/landing.js',
   'js/capas/login/login.js', 'js/capas/publico/privacidad.js', 'js/capas/sistema/inicio.js', 'js/capas/sistema/modulos.js',
   'js/capas/sistema/shell.js', 'js/config.js', 'js/modulos/admin/index.js', 'js/modulos/contacto/index.js',
   'js/modulos/cuenta/index.js', 'js/modulos/cuentos/datos.js', 'js/modulos/cuentos/editor.js', 'js/modulos/cuentos/importer.js',

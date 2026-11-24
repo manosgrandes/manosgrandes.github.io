@@ -1,48 +1,84 @@
 /* Manos Grandes Dientes Chiquitos — base compartida por las 3 capas
-   Sistema visual: tinta azul noche, superficies limpias, un color principal (azul)
-   y un acento rosa (la pañoleta de Sofi). Sombras suaves en capas, sin bordes 3D. */
+   Dos paletas:
+   · Externa (landing, login, páginas públicas): pasteles de la marca —
+     rosa #F2B4CC, cielo #75BDF2, menta #91D9B5, vainilla #FFD98A, coral #FFA995, lavanda #B8A5ED.
+   · Interna (sistema): lavanda/violeta con tarjetas blancas tipo "clay" y mosaicos pastel. */
 :root {
-  /* Marca */
-  --primario: #2E62E8;
-  --primario-oscuro: #1F4BC2;
-  --primario-claro: #EAF0FE;
-  --acento: #D9416F;
-  --acento-claro: #FDEBF1;
+  /* Pasteles de marca */
+  --p-rosa: #F2B4CC;
+  --p-cielo: #75BDF2;
+  --p-menta: #91D9B5;
+  --p-vainilla: #FFD98A;
+  --p-coral: #FFA995;
+  --p-lavanda: #B8A5ED;
+
+  /* Marca (externa) */
+  --primario: #75BDF2;
+  --primario-oscuro: #5AA9E6;
+  --primario-claro: #E6F3FD;
+  --sobre-primario: #26304F;
+  --acento: #D9608E;          /* rosa legible para títulos grandes */
+  --acento-texto: #B5466F;    /* rosa legible para texto pequeño */
+  --acento-claro: #FDEDF3;
 
   /* Tinta y superficies */
-  --tinta: #121B35;
-  --tinta-suave: #4E5873;
-  --tinta-tenue: #7D869C;
-  --linea: #E3E7EF;
-  --linea-suave: #EEF1F6;
-  --fondo: #F6F7FA;
-  --fondo-alt: #EEF2F8;
+  --tinta: #26304F;
+  --tinta-suave: #5C6482;
+  --tinta-tenue: #8A90A8;
+  --linea: #ECE7F3;
+  --linea-suave: #F3EFF8;
+  --fondo: #FBF8FD;
+  --fondo-alt: #F4EFFA;
   --blanco: #fff;
-  --noche: #0E1630;
+  --noche: #2D2A4A;
 
   /* Colores de apoyo (módulos y juegos) */
-  --cielo: #2E62E8;
-  --cielo-claro: #EAF0FE;
-  --menta: #0F9F74;
-  --menta-claro: #E4F5EE;
-  --coral: #E04F64;
-  --coral-claro: #FCEBED;
-  --sol: #F0B429;
-  --sol-claro: #FEF5DD;
-  --lila: #6D5DE8;
-  --lila-claro: #EFEDFD;
+  --cielo: #4A9FE0;
+  --cielo-claro: #E6F3FD;
+  --menta: #2FA77A;
+  --menta-claro: #E4F6EE;
+  --coral: #E9735F;
+  --coral-claro: #FFEDE8;
+  --sol: #F2BE4E;
+  --sol-claro: #FFF5DC;
+  --lila: #7C6AF2;
+  --lila-claro: #EFEBFF;
 
   /* Forma */
-  --radio: 18px;
-  --radio-chico: 12px;
-  --sombra-1: 0 1px 2px rgba(18, 27, 53, .06), 0 1px 1px rgba(18, 27, 53, .04);
-  --sombra: 0 1px 2px rgba(18, 27, 53, .05), 0 6px 20px -6px rgba(18, 27, 53, .10);
-  --sombra-3: 0 2px 4px rgba(18, 27, 53, .04), 0 24px 48px -12px rgba(18, 27, 53, .18);
-  --anillo: 0 0 0 4px rgba(46, 98, 232, .18);
+  --radio: 22px;
+  --radio-chico: 14px;
+  --sombra-1: 0 1px 2px rgba(60, 50, 110, .05), 0 2px 6px rgba(60, 50, 110, .04);
+  --sombra: 0 2px 4px rgba(60, 50, 110, .04), 0 10px 28px -8px rgba(60, 50, 110, .14);
+  --sombra-3: 0 4px 8px rgba(60, 50, 110, .05), 0 28px 56px -16px rgba(60, 50, 110, .24);
+  --anillo: 0 0 0 4px rgba(117, 189, 242, .35);
 
-  --fuente: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --fuente-titulo: "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --fuente: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --fuente-titulo: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
   --letra: 1.0625rem;
+}
+
+/* Paleta interna: el sistema */
+body[data-capa="sistema"] {
+  --primario: #6C5CE7;
+  --primario-oscuro: #5847D6;
+  --primario-claro: #EFEBFF;
+  --sobre-primario: #fff;
+  --acento: #6C5CE7;
+  --acento-texto: #5847D6;
+  --acento-claro: #EFEBFF;
+  --tinta: #2A2547;
+  --tinta-suave: #6A6589;
+  --tinta-tenue: #9893B2;
+  --linea: #ECE8FA;
+  --linea-suave: #F3F0FC;
+  --fondo: #F5F3FE;
+  --fondo-alt: #ECE8FD;
+  --noche: #2A2547;
+  --sombra-1: 0 1px 2px rgba(108, 92, 231, .06), 0 4px 12px rgba(108, 92, 231, .05);
+  --sombra: 0 2px 6px rgba(108, 92, 231, .06), 0 14px 32px -10px rgba(108, 92, 231, .20);
+  --sombra-3: 0 4px 10px rgba(108, 92, 231, .08), 0 30px 60px -18px rgba(108, 92, 231, .30);
+  --anillo: 0 0 0 4px rgba(108, 92, 231, .22);
+  --radio: 24px;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -59,8 +95,8 @@ h1, h2, h3, h4 { font-family: var(--fuente-titulo); line-height: 1.15; margin: .
 h1 { font-size: clamp(1.8rem, 4.2vw, 2.6rem); letter-spacing: -.025em; }
 h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); letter-spacing: -.02em; }
 h3 { font-size: 1.15rem; }
-::selection { background: #C9D8FC; }
-:focus-visible { outline: 3px solid rgba(46, 98, 232, .55); outline-offset: 2px; border-radius: 8px; }
+::selection { background: color-mix(in srgb, var(--p-lavanda) 55%, white); }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--primario) 70%, transparent); outline-offset: 2px; border-radius: 8px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .saltar { position: absolute; left: -999px; top: 0; background: var(--tinta); color: #fff; padding: .6em 1em; z-index: 99; }
 .saltar:focus { left: 8px; }
@@ -80,24 +116,24 @@ h3 { font-size: 1.15rem; }
 
 /* Botones */
 .btn {
-  --b: var(--primario); --b2: var(--primario-oscuro); --t: #fff;
-  font: inherit; font-weight: 600; font-size: 1rem; letter-spacing: -.005em; line-height: 1.2;
+  --b: var(--primario); --b2: var(--primario-oscuro); --t: var(--sobre-primario);
+  font: inherit; font-weight: 700; font-size: 1rem; letter-spacing: -.005em; line-height: 1.2;
   border: 1px solid transparent; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-  padding: .72rem 1.25rem; border-radius: var(--radio-chico); background: var(--b); color: var(--t); min-height: 46px;
-  box-shadow: 0 1px 2px rgba(18, 27, 53, .14), inset 0 1px 0 rgba(255, 255, 255, .14);
+  padding: .72rem 1.25rem; border-radius: 999px; background: var(--b); color: var(--t); min-height: 46px;
+  box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--b) 70%, transparent), inset 0 1px 0 rgba(255, 255, 255, .25);
   transition: background-color .15s, box-shadow .15s, transform .1s, border-color .15s, color .15s;
 }
 .btn:hover { background: var(--b2); color: var(--t); }
 .btn:active { transform: translateY(1px); }
 .btn:focus-visible { outline: none; box-shadow: var(--anillo); }
 .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-.btn-menta { --b: var(--menta); --b2: #0B8461; }
-.btn-coral { --b: var(--coral); --b2: #C73D51; }
-.btn-sol { --b: var(--sol); --b2: #E0A21A; --t: #3A2800; }
+.btn-menta { --b: var(--p-menta); --b2: #7BCDA4; --t: #17402F; }
+.btn-coral { --b: var(--p-coral); --b2: #FF9580; --t: #4A1C12; }
+.btn-sol { --b: var(--p-vainilla); --b2: #FFCF6B; --t: #4A3500; }
 .btn-claro { --b: #fff; --b2: var(--fondo); --t: var(--tinta); border-color: var(--linea); box-shadow: var(--sombra-1); }
 .btn-claro:hover { border-color: #CFD6E3; }
-.btn-mini { --b: var(--fondo-alt); --b2: #E2E8F2; --t: var(--tinta); padding: .4rem .8rem; min-height: 36px; font-size: .9rem; box-shadow: none; border-radius: 10px; }
-.btn-grande { font-size: 1.05rem; padding: .9rem 1.6rem; min-height: 52px; border-radius: 14px; }
+.btn-mini { --b: var(--fondo-alt); --b2: color-mix(in srgb, var(--fondo-alt) 80%, var(--tinta) 6%); --t: var(--tinta); padding: .4rem .9rem; min-height: 36px; font-size: .9rem; box-shadow: none; }
+.btn-grande { font-size: 1.05rem; padding: .9rem 1.7rem; min-height: 54px; }
 
 .etiqueta { display: inline-block; font-size: .78rem; font-weight: 600; padding: .18rem .6rem; border-radius: 999px; background: var(--cielo-claro); color: #1D4AB8; }
 .e-higiene { background: var(--cielo-claro); color: #1D4AB8; }
@@ -135,14 +171,14 @@ input[type=checkbox], input[type=radio] { width: auto; transform: scale(1.2); ma
 .carta.volteada .emo, .carta.hecha .emo { visibility: visible; }
 
 /* ---------- Sofi saludando (capas) ---------- */
-.sofi-saluda { position: relative; aspect-ratio: 720 / 1328; }
+.sofi-saluda { position: relative; aspect-ratio: 720 / 1148; }
 .sofi-capa { position: absolute; inset: 0; width: 100%; height: 100%; }
-.sofi-mano { transform-origin: 86.8% 50.3%; animation: saludo 1.1s ease-in-out .5s 3 both; }
+.sofi-mano { transform-origin: 18.3% 45.1%; animation: saludo 1.1s ease-in-out .5s 3 both; }
 .sofi-saluda.hablando .sofi-mano { animation: saludo .9s ease-in-out infinite; }
 @keyframes saludo {
   0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-11deg); }
-  75% { transform: rotate(7deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(8deg); }
 }
 
 /* ---------- Dientín ---------- */

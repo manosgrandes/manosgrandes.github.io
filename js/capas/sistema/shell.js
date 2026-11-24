@@ -128,7 +128,7 @@ function pintarMenu() {
   const s = sesion.actual();
   if (!raiz || !s) return;
   const mods = modulosPara(s.tipo, esAdmin);
-  const enlace = (m) => `<a href="#/app${m.id === 'inicio' ? '' : `/${m.id}`}" data-mod="${m.id}" style="--c:${m.color}" ${m.id === moduloActivo ? 'aria-current="page"' : ''}>
+  const enlace = (m) => `<a href="#/app${m.id === 'inicio' ? '' : `/${m.id}`}" data-mod="${m.id}" style="--c:${m.color};--t:${m.tinte}" ${m.id === moduloActivo ? 'aria-current="page"' : ''}>
       <span class="sis-ico">${icono(m.ico, { tam: 18 })}</span><span>${esc(m.corto || m.titulo)}</span>${m.id === 'admin' && pendientesAdmin ? `<span class="sis-globo" aria-label="${pendientesAdmin} pendientes">${pendientesAdmin}</span>` : ''}</a>`;
   const grupos = Object.entries(GRUPOS).map(([g, nombre]) => {
     const lista = mods.filter((m) => m.grupo === g);
@@ -165,9 +165,9 @@ export function prepararVista(modulo, { encabezado }) {
 
   const contenido = $('#contenido', raiz);
   contenido.innerHTML = encabezado
-    ? `<header class="mod-cabecera" style="--c:${modulo.color}">
-        <span class="mod-ico" aria-hidden="true">${icono(modulo.ico, { tam: 26 })}</span>
+    ? `<header class="mod-cabecera" style="--c:${modulo.color};--t:${modulo.tinte}">
         <div><h1>${esc(modulo.titulo)}</h1><p>${esc(modulo.desc)}</p></div>
+        <span class="mod-arte" aria-hidden="true">${modulo.icono}</span>
       </header><div id="vista" class="vista"></div>`
     : '<div id="vista" class="vista"></div>';
   return { contenido, vista: $('#vista', contenido) };

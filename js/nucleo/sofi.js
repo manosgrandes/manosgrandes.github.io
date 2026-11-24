@@ -4,15 +4,19 @@ import { leer, vozDisponible } from './speech.js';
 
 export const SOFI = {
   nombre: 'Sofi',
-  img: 'img/sofi.webp',           // Sofi completa saludando (720 × 1328)
+  img: 'img/sofi.webp',           // Sofi completa saludando (720 × 1148)
   cuerpo: 'img/sofi-cuerpo.webp', // capas para animar el saludo
   brazo: 'img/sofi-brazo.webp',
   cara: 'img/sofi-cara.webp',
+  busto: 'img/sofi-busto.webp',   // hasta los hombros, saludando (560 × 533)
   ancho: 720,
-  alto: 1328,
+  alto: 1148,
   bienvenida: '¡Hola! Bienvenido a Manos Grandes, Dientes Chiquitos.',
   saludo: '¡Hola! Soy Sofi, la doctora de las sonrisas. Bienvenido a Manos Grandes, Dientes Chiquitos. Con mi amigo Dientín vamos a aprender a cuidar los dientes jugando.',
 };
+
+/** Dientín ilustrado (el SVG de character.js sigue en los juegos). */
+export const DIENTIN = { img: 'img/dientin.webp', ancho: 600, alto: 603 };
 
 /** Sofi en capas: el brazo se mueve saludando (ver .sofi-saluda en base.css). */
 export function sofiSaludando({ clase = '', alt = 'Sofi, una niña sonriente con bata blanca estampada de dientes, saludando con la mano' } = {}) {

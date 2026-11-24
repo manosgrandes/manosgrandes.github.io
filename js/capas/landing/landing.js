@@ -1,9 +1,8 @@
 // Capa 1 — Landing: presentación pública. Sofi recibe con un saludo (gesto y voz).
 // Desde aquí se pasa al login.
 
-import { dientin } from '../../nucleo/character.js';
 import { sesion } from '../../nucleo/sesion.js';
-import { SOFI, sofiSaludando, saludarConVoz } from '../../nucleo/sofi.js';
+import { SOFI, DIENTIN, sofiSaludando, saludarConVoz } from '../../nucleo/sofi.js';
 import { leer, detener, vozDisponible } from '../../nucleo/speech.js';
 import { icono } from '../../nucleo/iconos.js';
 import { esc } from '../../nucleo/util.js';
@@ -165,8 +164,8 @@ export function render(raiz) {
       <div class="lp-ancho">
         <div class="lp-amigos" data-revelar>
           <div class="lp-amigos-fig">
-            <img src="${SOFI.cara}" width="160" height="160" alt="Sofi" class="lp-amiga" loading="lazy">
-            <div class="lp-amigo">${dientin({ tam: 120, cepillo: true, clase: 'rebote' })}</div>
+            <img src="${SOFI.busto}" width="560" height="533" alt="Sofi, la doctora de las sonrisas, saludando" class="lp-amiga" loading="lazy">
+            <img src="${DIENTIN.img}" width="${DIENTIN.ancho}" height="${DIENTIN.alto}" alt="Dientín, el diente amigo, con su cepillo" class="lp-amigo" loading="lazy">
           </div>
           <div>
             <p class="lp-antetitulo">Los personajes</p>

@@ -37,46 +37,59 @@ export function render(vista) {
 
   const mods = modulosPara(s.tipo).filter((m) => m.id !== 'inicio');
 
+  const rapidos = mods.slice(0, 4);
   vista.innerHTML = `
   <div id="alerta-admin"></div>
   <section class="tab-bienvenida">
     <div class="tab-bienvenida-txt">
       <p class="tab-fecha">${esc(new Date().toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' }))}</p>
-      <h1>${saludo}, ${esc(id.nombre)} <span aria-hidden="true">${esc(id.avatar)}</span></h1>
+      <h1>${saludo}, ${esc(id.nombre)} <span aria-hidden="true">👋</span></h1>
       <p>${texto}</p>
-      ${r ? `<dl class="tab-chips">
-        <div><dt>Estrellas</dt><dd>${r.totalEstrellas}</dd></div>
-        <div><dt>Medallas</dt><dd>${ganadas.length}</dd></div>
-        <div><dt>Actividades</dt><dd>${r.partidas}</dd></div></dl>` : ''}
+      <a class="btn tab-cta" href="#/app/${s.tipo === 'adulto' ? 'guias' : 'juegos'}">${s.tipo === 'adulto' ? 'Ver guías' : '¡A jugar!'} ${icono('flecha', { tam: 18 })}</a>
     </div>
     <img class="tab-sofi" src="${SOFI.img}" alt="" width="${SOFI.ancho}" height="${SOFI.alto}">
   </section>
 
-  <div class="tab-titulo"><h2>Módulos</h2><p>Elige por dónde quieres empezar.</p></div>
+  <nav class="tab-rapidos" aria-label="Accesos rápidos">
+    ${rapidos.map((m, i) => `<a href="#/app/${m.id}" style="--c:${m.color};--t:${m.tinte};--i:${i}"><span class="tab-burbuja" aria-hidden="true">${m.icono}</span><span>${esc(m.corto || m.titulo)}</span></a>`).join('')}
+  </nav>
+
+  <div class="tab-fila">
+    <section class="tab-consejo">
+      <img src="${SOFI.cara}" alt="" width="72" height="72">
+      <div>
+        <p class="tab-consejo-titulo">Consejo de Sofi</p>
+        <p class="tab-consejo-txt">${consejo}</p>
+        ${botonLeer(consejo)}
+      </div>
+    </section>
+    ${r ? `<section class="tarjeta tab-progreso">
+      <h2>Tu progreso</h2>
+      <dl>
+        <div><dt>Estrellas</dt><dd>${r.totalEstrellas} <span aria-hidden="true">⭐</span></dd></div>
+        <div><dt>Medallas</dt><dd>${ganadas.length} <span aria-hidden="true">🏅</span></dd></div>
+        <div><dt>Actividades</dt><dd>${r.partidas} <span aria-hidden="true">🎯</span></dd></div>
+      </dl>
+    </section>` : `<section class="tarjeta tab-progreso">
+      <h2>¿Por dónde empezar?</h2>
+      <p class="suave" style="margin:0">${s.tipo === 'invitado' ? 'Prueba un juego o un cuento. Para guardar estrellas, entra con un perfil.' : 'Lee la guía "Higiene bucal según la edad" y descarga los recordatorios para tu celular.'}</p>
+    </section>`}
+  </div>
+
+  <div class="tab-titulo"><h2>Todos los módulos</h2></div>
   <div class="tab-modulos">
     ${mods.map((m, i) => `
-      <a class="tab-modulo" href="#/app/${m.id}" style="--c:${m.color};--i:${i}">
-        <span class="sis-ico">${icono(m.ico, { tam: 22 })}</span>
-        <h3>${esc(m.titulo)}</h3>
-        <p>${esc(m.desc)}</p>
-        <span class="tab-ir">Abrir ${icono('flecha', { tam: 16 })}</span>
+      <a class="tab-modulo" href="#/app/${m.id}" style="--c:${m.color};--t:${m.tinte};--i:${i}">
+        <span class="tab-mosaico" aria-hidden="true">${m.icono}</span>
+        <span class="tab-modulo-txt"><strong>${esc(m.titulo)}</strong><span>${esc(m.desc)}</span></span>
+        <span class="tab-ir" aria-hidden="true">${icono('flecha', { tam: 18 })}</span>
       </a>`).join('')}
   </div>
 
-  <div class="tab-fila">
-    <section class="tarjeta">
-      <div class="fila entre"><h3 class="tab-h3"><img src="${SOFI.cara}" alt="" width="32" height="32"> Consejo de Sofi</h3>${botonLeer(consejo)}</div>
-      <p style="font-size:1.1rem;margin-bottom:0">${consejo}</p>
-    </section>
-    ${p ? `<section class="tarjeta">
-      <h3 style="margin-top:0">Mis medallas</h3>
-      <div class="tab-medallas">${todasLasMedallas.map((m) => `<span class="medalla ${ganadas.includes(m.id) ? '' : 'bloqueada'}" title="${esc(m.nombre)}"><span class="icono">${m.icono}</span></span>`).join('')}</div>
-      <p style="margin-bottom:0"><a href="#/app/perfil">Ver mi perfil →</a></p>
-    </section>` : `<section class="tarjeta">
-      <h3 style="margin-top:0">¿Por dónde empezar?</h3>
-      <p style="margin-bottom:0">${s.tipo === 'invitado' ? 'Prueba un juego o un cuento. Para guardar estrellas, entra con un perfil.' : 'Lee la guía "Higiene bucal según la edad" y descarga los recordatorios para tu celular.'}</p>
-    </section>`}
-  </div>`;
+  ${p ? `<section class="tab-medallas-sec">
+    <div class="tab-titulo"><h2>Mis medallas</h2><a href="#/app/perfil">Ver todas</a></div>
+    <div class="tab-medallas">${todasLasMedallas.map((m) => `<span class="tab-medalla ${ganadas.includes(m.id) ? '' : 'bloqueada'}" title="${esc(m.nombre)}"><span class="tab-burbuja">${m.icono}</span><small>${esc(m.nombre)}</small></span>`).join('')}</div>
+  </section>` : ''}`;
 
   if (s.nube && nubeActiva()) avisarAdmin(vista);
 }

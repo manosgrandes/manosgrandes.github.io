@@ -8,7 +8,7 @@ import { sesion } from '../../nucleo/sesion.js';
 import { nubeActiva } from '../../config.js';
 import { esc, aviso, $ } from '../../nucleo/util.js';
 import { leer } from '../../nucleo/speech.js';
-import { sofiSaludando } from '../../nucleo/sofi.js';
+import { DIENTIN } from '../../nucleo/sofi.js';
 import { icono } from '../../nucleo/iconos.js';
 
 export function render(raiz, params) {
@@ -20,21 +20,36 @@ export function render(raiz, params) {
   raiz.innerHTML = `
   <div class="lg">
     <section class="lg-arte">
-      <a class="marca marca-clara" href="#/"><img src="icons/icon.svg" alt="" width="38" height="38"><span><strong>Manos Grandes</strong><small>Dientes Chiquitos</small></span></a>
+      <a class="marca" href="#/"><img src="icons/icon.svg" alt="" width="38" height="38"><span><strong>Manos Grandes</strong><small>Dientes Chiquitos</small></span></a>
       <div class="lg-arte-txt">
         <p class="lg-antetitulo">Bienvenidos</p>
         <h2>Cuidar la sonrisa se aprende <span>juntos</span>.</h2>
         <p>Juegos, cuentos y guías para niñas, niños, familias y docentes.</p>
       </div>
-      <div class="lg-escena">
-        ${sofiSaludando({ clase: 'lg-sofi', alt: 'Sofi, la doctora de las sonrisas, saludando' })}
-        <div class="lg-globo" aria-live="polite"><p id="dice">¿Quién va a entrar hoy?</p></div>
+      <div class="lg-vivo" aria-hidden="true">
+        <span class="lg-mancha m1"></span><span class="lg-mancha m2"></span><span class="lg-mancha m3"></span><span class="lg-mancha m4"></span>
+        <div class="lg-burbujas" id="lg-burbujas"></div>
+      </div>
+      <div class="lg-escena" id="lg-escena">
+        <div class="lg-aro" data-prof="8" aria-hidden="true"></div>
+        <div class="lg-aro lg-aro2" data-prof="14" aria-hidden="true"></div>
+        <span class="lg-flota f1" data-prof="22" aria-hidden="true">🍎</span>
+        <span class="lg-flota f2" data-prof="28" aria-hidden="true">⭐</span>
+        <span class="lg-flota f3" data-prof="18" aria-hidden="true">💖</span>
+        <span class="lg-flota f4" data-prof="24" aria-hidden="true">✨</span>
+        <div class="lg-chip c1" data-prof="16" aria-hidden="true"><span>⭐</span><b>+3</b> estrellas</div>
+        <div class="lg-chip c2" data-prof="20" aria-hidden="true"><span>🎮</span>5 juegos</div>
+        <div class="lg-personaje" data-prof="5">
+          <img class="lg-dientin" src="${DIENTIN.img}" width="${DIENTIN.ancho}" height="${DIENTIN.alto}" alt="Dientín, el diente amigo, con su cepillo">
+          <div class="lg-globo" aria-live="polite"><p id="dice">¿Quién va a entrar hoy?</p></div>
+        </div>
+        <div class="lg-piso" aria-hidden="true"></div>
       </div>
     </section>
 
     <section class="lg-panel">
+      <a class="lg-volver" href="#/">${icono('atras', { tam: 16 })} Volver al inicio</a>
       <div class="lg-tarjeta">
-        <a class="lg-volver" href="#/">${icono('atras', { tam: 16 })} Volver al inicio</a>
         <header class="lg-cabeza">
           <h1>Entrar</h1><p>Elige cómo quieres ingresar al sistema.</p>
         </header>
@@ -70,42 +85,51 @@ export function render(raiz, params) {
     location.hash = destino;
   };
 
+  // En el formulario de niños se esconde lo secundario para que todo quepa sin desplazarse.
+  const creando = (si) => raiz.querySelector('.lg-panel').classList.toggle('lg-creando', si);
+
   // ---------- Niña o niño ----------
   const pintarNino = () => {
     const lista = perfiles.lista();
+    creando(!lista.length && pestana === 'nino');
+    const TONOS = ['#FCE4EE', '#DCEFFC', '#DDF5EA', '#FFF1D2', '#ECE7FD', '#FFE6DF'];
+    const escuchar = (t) => `<button type="button" class="lg-oir" data-oir="${t}" aria-label="Escuchar: ${t}">${icono('sonido', { tam: 18 })}</button>`;
+    const pregunta = lista.length ? '¿Quién va a jugar hoy? Toca tu dibujo.' : '¡Hola! Crea tu perfil para empezar a jugar.';
     $('#panel-nino', raiz).innerHTML = `
-      ${lista.length ? `<p class="lg-sub">Toca tu perfil</p>
-        <div class="lg-perfiles">${lista.map((p, i) => `<button class="lg-perfil" data-id="${p.id}" style="--i:${i}">
-          <span class="lg-perfil-ava">${esc(p.avatar)}</span><strong>${esc(p.apodo)}</strong><small>★ ${progreso.resumen(p.id).totalEstrellas}</small></button>`).join('')}
-          <button class="lg-perfil lg-perfil-nuevo" id="nuevo-perfil" style="--i:${lista.length}"><span class="lg-perfil-ava">${icono('mas', { tam: 24 })}</span><strong>Soy nuevo</strong><small>Crear perfil</small></button>
+      ${lista.length ? `<div class="lg-sub-fila"><p class="lg-sub">¿Quién va a jugar hoy?</p>${escuchar(pregunta)}</div>
+        <div class="lg-perfiles">${lista.map((p, i) => `<button class="lg-perfil" data-id="${p.id}" style="--i:${i};--tono:${TONOS[i % TONOS.length]}">
+          <span class="lg-perfil-ava">${esc(p.avatar)}</span><strong>${esc(p.apodo)}</strong><span class="lg-estrellas">⭐ ${progreso.resumen(p.id).totalEstrellas}</span></button>`).join('')}
+          <button class="lg-perfil lg-perfil-nuevo" id="nuevo-perfil" style="--i:${lista.length}"><span class="lg-perfil-ava">${icono('mas', { tam: 26 })}</span><strong>Soy nuevo</strong><span class="lg-estrellas">Crear perfil</span></button>
         </div>` : ''}
-      <form id="form-nino" class="lg-form" ${lista.length ? 'hidden' : ''}>
-        <p class="lg-sub">${lista.length ? 'Crea tu perfil' : '¡Crea tu perfil para empezar!'}</p>
-        <label class="lg-campo"><span>Tu apodo</span><input id="apodo" required maxlength="20" placeholder="Ej.: Estrella Feliz" autocomplete="off"></label>
-        <p class="ayuda">Un apodo divertido. No escribas tu nombre completo.</p>
-        <fieldset class="lg-avatares"><legend>Escoge tu avatar</legend>
+      <form id="form-nino" class="lg-form lg-form-nino" ${lista.length ? 'hidden' : ''}>
+        <div class="lg-sub-fila">${lista.length ? `<button type="button" class="lg-oir" id="cancelar-nuevo" aria-label="Volver a los perfiles">${icono('atras', { tam: 18 })}</button>` : ''}<p class="lg-sub">${lista.length ? 'Crea tu perfil' : '¡Crea tu perfil para empezar!'}</p>${escuchar('Escribe un apodo divertido y escoge tu dibujo.')}</div>
+        <label class="lg-campo"><span>Tu apodo</span><input id="apodo" required maxlength="20" placeholder="Un apodo divertido, no tu nombre" autocomplete="off"></label>
+        <fieldset class="lg-avatares"><legend>Escoge tu dibujo</legend>
           <div class="avatares">${AVATARES.map((a, i) => `<label><input type="radio" name="avatar" value="${a}" ${i === 0 ? 'checked' : ''}><span>${a}</span></label>`).join('')}</div>
         </fieldset>
-        ${nubeActiva() ? '<label class="lg-campo"><span>Código del aula (opcional)</span><input id="aula" maxlength="6" placeholder="Te lo da tu profe" style="text-transform:uppercase"></label>' : ''}
+        ${nubeActiva() ? '<details class="lg-aula"><summary>¿Tienes un código de aula?</summary><input id="aula" maxlength="6" placeholder="Te lo da tu profe" aria-label="Código del aula" style="text-transform:uppercase"></details>' : ''}
         <button class="btn btn-grande lg-ancho">¡Entrar a jugar! ${icono('flecha', { tam: 18 })}</button>
-        ${lista.length ? '<button type="button" class="btn btn-mini lg-ancho" id="cancelar-nuevo">Volver a los perfiles</button>' : ''}
       </form>`;
 
+    $('#panel-nino', raiz).querySelectorAll('[data-oir]').forEach((b) => b.addEventListener('click', () => leer(b.dataset.oir, { tono: 1.25 })));
     raiz.querySelectorAll('[data-id]').forEach((b) => b.addEventListener('click', () => {
       const p = lista.find((x) => x.id === b.dataset.id);
       perfiles.activar(p.id);
       leer(`¡Hola, ${p.apodo}!`);
-      entrar('nino', {}, `¡Hola, ${p.apodo}!`);
+      b.classList.add('elegido');
+      dice(`¡Hola, ${p.apodo}! ¡A jugar!`);
+      setTimeout(() => entrar('nino', {}, `¡Hola, ${p.apodo}!`), 450);
     }));
     const form = $('#form-nino', raiz);
     $('#nuevo-perfil', raiz)?.addEventListener('click', () => {
       form.hidden = false;
       raiz.querySelector('.lg-perfiles').hidden = true;
-      raiz.querySelector('#panel-nino > .lg-sub').hidden = true;
+      raiz.querySelector('#panel-nino > .lg-sub-fila').hidden = true;
+      creando(true);
       $('#apodo', raiz).focus();
       dice('¡Qué bien! Escribe un apodo divertido.');
     });
-    $('#cancelar-nuevo', raiz)?.addEventListener('click', pintarNino);
+    $('#cancelar-nuevo', raiz)?.addEventListener('click', () => { pintarNino(); creando(false); });
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const apodo = $('#apodo', raiz).value.trim();
@@ -243,6 +267,7 @@ export function render(raiz, params) {
       t.tabIndex = activa ? 0 : -1;
     });
     $('#panel-nino', raiz).hidden = p !== 'nino';
+    creando(p === 'nino' && !$('#form-nino', raiz)?.hidden);
     $('#panel-adulto', raiz).hidden = p !== 'adulto';
     dice(p === 'nino' ? '¡Hola! Toca tu perfil o crea uno nuevo.' : '¡Bienvenidos! Las manos grandes también aprenden aquí.');
   };
@@ -260,4 +285,50 @@ export function render(raiz, params) {
   pintarNino();
   pintarAdulto();
   cambiar(pestana);
+  return animarArte(raiz);
+}
+
+/** Fondo vivo del lado izquierdo: burbujas, saltito de Dientín y profundidad con el mouse. */
+function animarArte(raiz) {
+  const limpiezas = [];
+  const sinMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const zona = $('#lg-burbujas', raiz);
+  for (let i = 0; i < 18; i++) {
+    const b = document.createElement('span');
+    const t = 7 + Math.random() * 3;
+    b.style.cssText = `left:${Math.random() * 100}%;--s:${10 + Math.random() * 34}px;--t:${t}s;--x:${(Math.random() - 0.5) * 60}px;animation-delay:${-Math.random() * t}s`;
+    zona.append(b);
+  }
+  if (sinMovimiento) return () => {};
+
+  // Dientín da un saltito de alegría cada cierto tiempo.
+  const dientin = raiz.querySelector('.lg-dientin');
+  const reloj = setInterval(() => {
+    if (!dientin?.isConnected) return;
+    dientin.classList.remove('salta');
+    void dientin.offsetWidth;
+    dientin.classList.add('salta');
+  }, 7000);
+  limpiezas.push(() => clearInterval(reloj));
+
+  // Profundidad: las capas se mueven distinto según el mouse.
+  const arte = raiz.querySelector('.lg-arte');
+  const capas = [...arte.querySelectorAll('[data-prof]')];
+  if (matchMedia('(pointer: fine)').matches) {
+    let pendiente = false;
+    const mover = (e) => {
+      if (pendiente) return;
+      pendiente = true;
+      requestAnimationFrame(() => {
+        const r = arte.getBoundingClientRect();
+        const dx = (e.clientX - r.left) / r.width - 0.5;
+        const dy = (e.clientY - r.top) / r.height - 0.5;
+        capas.forEach((c) => { const p = Number(c.dataset.prof); c.style.translate = `${-dx * p}px ${-dy * p}px`; });
+        pendiente = false;
+      });
+    };
+    arte.addEventListener('pointermove', mover);
+    limpiezas.push(() => arte.removeEventListener('pointermove', mover));
+  }
+  return () => limpiezas.forEach((f) => f());
 }

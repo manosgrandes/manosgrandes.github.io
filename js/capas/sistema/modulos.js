@@ -13,11 +13,11 @@ export const GRUPOS = {
 
 export const MODULOS = [
   {
-    id: 'inicio', titulo: 'Inicio', icono: '🏠', ico: 'inicio', color: '#2E62E8', roles: TODOS,
+    id: 'inicio', titulo: 'Inicio', icono: '🏠', ico: 'inicio', color: '#6C5CE7', tinte: '#ECE7FD', roles: TODOS,
     desc: 'Tu tablero', rutas: [[/^$/, () => import('./inicio.js')]],
   },
   {
-    id: 'juegos', grupo: 'aprender', titulo: 'Juegos', icono: '🎮', ico: 'juegos', color: '#2E62E8', roles: TODOS,
+    id: 'juegos', grupo: 'aprender', titulo: 'Juegos', icono: '🎮', ico: 'juegos', color: '#2F86C9', tinte: '#DCEFFC', roles: TODOS,
     desc: 'Cepilla a Dientín, arma la lonchera y gana estrellas.',
     rutas: [
       [/^$/, () => import('../../modulos/juegos/index.js'), { encabezado: true }],
@@ -25,7 +25,7 @@ export const MODULOS = [
     ],
   },
   {
-    id: 'cuentos', grupo: 'aprender', titulo: 'Cuentos', icono: '📚', ico: 'cuentos', color: '#0F8F69', roles: TODOS,
+    id: 'cuentos', grupo: 'aprender', titulo: 'Cuentos', icono: '📚', ico: 'cuentos', color: '#2A9A6E', tinte: '#DDF5EA', roles: TODOS,
     desc: 'Historias para leer y escuchar, y tus propios libros.',
     rutas: [
       [/^$/, () => import('../../modulos/cuentos/index.js'), { encabezado: true }],
@@ -34,7 +34,7 @@ export const MODULOS = [
     ],
   },
   {
-    id: 'guias', grupo: 'acompanar', titulo: 'Guías para padres y docentes', corto: 'Guías', icono: '👨‍👩‍👧', ico: 'guias', color: '#C8365F', roles: ADULTOS,
+    id: 'guias', grupo: 'acompanar', titulo: 'Guías para padres y docentes', corto: 'Guías', icono: '👨‍👩‍👧', ico: 'guias', color: '#C9567F', tinte: '#FCE4EE', roles: ADULTOS,
     desc: 'Higiene por edades, alimentación, acompañamiento y aula.',
     rutas: [
       [/^$/, () => import('../../modulos/guias/index.js'), { encabezado: true }],
@@ -42,17 +42,17 @@ export const MODULOS = [
     ],
   },
   {
-    id: 'recordatorios', grupo: 'acompanar', titulo: 'Recordatorios', icono: '⏰', ico: 'recordatorios', color: '#B7791F', roles: TODOS,
+    id: 'recordatorios', grupo: 'acompanar', titulo: 'Recordatorios', icono: '⏰', ico: 'recordatorios', color: '#B9801C', tinte: '#FFF1D2', roles: TODOS,
     desc: 'Alarmas de cepillado, temporizador y calendario de estrellas.',
     rutas: [[/^$/, () => import('../../modulos/recordatorios/index.js'), { encabezado: true }]],
   },
   {
-    id: 'docentes', grupo: 'gestion', titulo: 'Panel docente', icono: '📊', ico: 'docentes', color: '#5B4BD6', roles: ADULTOS,
+    id: 'docentes', grupo: 'gestion', titulo: 'Panel docente', icono: '📊', ico: 'docentes', color: '#6C5CE7', tinte: '#ECE7FD', roles: ADULTOS,
     desc: 'Aulas, seguimiento de estudiantes y reportes.',
     rutas: [[/^$/, () => import('../../modulos/docentes/index.js'), { encabezado: true }]],
   },
   {
-    id: 'foro', grupo: 'gestion', titulo: 'Foro', icono: '💬', ico: 'foro', color: '#0F8F69', roles: ADULTOS,
+    id: 'foro', grupo: 'gestion', titulo: 'Foro', icono: '💬', ico: 'foro', color: '#2A9A6E', tinte: '#DDF5EA', roles: ADULTOS,
     desc: 'Ideas y dudas entre familias y docentes.',
     rutas: [
       [/^$/, () => import('../../modulos/foro/index.js'), { encabezado: true }],
@@ -60,22 +60,22 @@ export const MODULOS = [
     ],
   },
   {
-    id: 'contacto', grupo: 'gestion', titulo: 'Contacto', icono: '✉️', ico: 'contacto', color: '#2E62E8', roles: ADULTOS,
+    id: 'contacto', grupo: 'gestion', titulo: 'Contacto', icono: '✉️', ico: 'contacto', color: '#2F86C9', tinte: '#DCEFFC', roles: ADULTOS,
     desc: 'Escríbenos tus preguntas e ideas.',
     rutas: [[/^$/, () => import('../../modulos/contacto/index.js'), { encabezado: true }]],
   },
   {
-    id: 'perfil', grupo: 'cuenta', titulo: 'Mi perfil', icono: '⭐', ico: 'perfil', color: '#B7791F', roles: ['nino'],
+    id: 'perfil', grupo: 'cuenta', titulo: 'Mi perfil', icono: '⭐', ico: 'perfil', color: '#B9801C', tinte: '#FFF1D2', roles: ['nino'],
     desc: 'Tus estrellas, medallas y tu aula.',
     rutas: [[/^$/, () => import('../../modulos/perfil/index.js'), { encabezado: true }]],
   },
   {
-    id: 'cuenta', grupo: 'cuenta', titulo: 'Mi cuenta', icono: '👤', ico: 'cuenta', color: '#4E5873', roles: ['adulto'],
+    id: 'cuenta', grupo: 'cuenta', titulo: 'Mi cuenta', icono: '👤', ico: 'cuenta', color: '#6A6589', tinte: '#EFEDF6', roles: ['adulto'],
     desc: 'Datos de tu cuenta y cuentos enviados.',
     rutas: [[/^$/, () => import('../../modulos/cuenta/index.js'), { encabezado: true }]],
   },
   {
-    id: 'admin', grupo: 'cuenta', titulo: 'Administración', icono: '🛠️', ico: 'admin', color: '#C8365F', roles: ['adulto'], soloAdmin: true,
+    id: 'admin', grupo: 'cuenta', titulo: 'Administración', icono: '🛠️', ico: 'admin', color: '#D3604B', tinte: '#FFE6DF', roles: ['adulto'], soloAdmin: true,
     desc: 'Aprobar cuentos, moderar el foro y ver estadísticas.',
     rutas: [[/^$/, () => import('../../modulos/admin/index.js'), { encabezado: true }]],
   },
