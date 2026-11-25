@@ -2,7 +2,7 @@
 // Contenido real del proyecto: juegos, cuentos y guías.
 
 import { clamp, lerp, smooth, span, inercia } from './motor.js';
-import { ICONOS_JUEGO, PORTADAS, PORTADA_GENERICA, COLOR_CUENTO } from './dibujos.js';
+import { ICONOS_JUEGO, PORTADAS, COLOR_CUENTO } from './dibujos.js';
 import { LISTA_JUEGOS } from '../../modulos/juegos/index.js';
 import { JUEGOS } from '../../nucleo/store.js';
 import { CUENTOS_BASE } from '../../modulos/cuentos/datos.js';
@@ -117,11 +117,11 @@ export function markupResto({ destino, haySesion }) {
         <p>Toca un libro para abrirlo. Vuelve a tocarlo para leerlo o escucharlo.</p>
       </header>
       <ul class="e5-libros" role="list">
-        ${CUENTOS_BASE.map((c) => {
+        ${CUENTOS_BASE.filter((c) => PORTADAS[c.id]).map((c) => {
           const [fondo, tinta] = COLOR_CUENTO[c.tema] || COLOR_CUENTO.otro;
           return `<li><a class="libro" href="#/app/cuentos/base/${esc(c.id)}" aria-expanded="false" aria-label="${esc(c.titulo)}: tocar para abrir el libro" style="--fondo:${fondo};--tinta-libro:${tinta}">
             <span class="libro-pagina"><strong>${esc(c.titulo)}</strong><span>${esc(c.resumen)}</span><small>${esc(c.edad)} · ${c.paginas.length} páginas</small><span class="libro-leer">Leer el cuento ${flecha}</span></span>
-            <span class="libro-tapa" aria-hidden="true"><span class="libro-arte">${PORTADAS[c.id] || (c.icono ? `<span class="libro-emoji">${c.icono}</span>` : PORTADA_GENERICA)}</span><span class="libro-titulo">${esc(c.titulo)}</span><span class="libro-lomo"></span><span class="libro-toca">Toca para abrir</span></span>
+            <span class="libro-tapa" aria-hidden="true"><span class="libro-arte">${PORTADAS[c.id]}</span><span class="libro-titulo">${esc(c.titulo)}</span><span class="libro-lomo"></span><span class="libro-toca">Toca para abrir</span></span>
           </a></li>`;
         }).join('')}
       </ul>

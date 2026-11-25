@@ -198,6 +198,14 @@ input[type=checkbox], input[type=radio] { width: auto; transform: scale(1.2); ma
 
 /* ---------- Dientín ---------- */
 .dientin { display: block; }
+.dientin-3d { position: relative; display: inline-block; flex: none; line-height: 0; }
+.dientin-3d > img:first-child { width: 100%; height: auto; display: block; filter: drop-shadow(0 10px 12px rgba(90, 70, 170, .22)); user-select: none; -webkit-user-drag: none; }
+.dientin-3d.animo-triste > img:first-child { filter: saturate(.6) drop-shadow(0 8px 10px rgba(90, 70, 170, .2)); transform: rotate(-6deg); }
+.dientin-3d.animo-sorpresa > img:first-child { transform: scale(1.04) rotate(3deg); }
+.dientin-gota { position: absolute; left: 22%; top: 30%; font-size: .9em; line-height: 1; animation: gota 1.6s ease-in infinite; }
+.dientin-signo { position: absolute; right: 0; top: -4%; font-size: 1.3em; line-height: 1; animation: rebote 1s ease-in-out infinite; }
+.dientin-cepillo-img { position: absolute; right: -14%; bottom: 18%; width: 42%; transform: rotate(-30deg); filter: drop-shadow(0 4px 4px rgba(0, 0, 0, .15)); }
+@keyframes gota { 0% { opacity: 0; transform: translateY(-4px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(16px); } }
 .rebote { animation: rebote 3s ease-in-out infinite; }
 @keyframes rebote { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 .dientin-dice { display: flex; align-items: center; gap: 1rem; }
@@ -233,3 +241,4 @@ input[type=checkbox], input[type=radio] { width: auto; transform: scale(1.2); ma
 .marca img { width: 38px; height: 38px; }
 .marca strong { display: block; font-family: var(--fuente-titulo); font-size: 1.02rem; font-weight: 700; letter-spacing: -.01em; }
 .marca small { display: block; font-size: .82rem; font-weight: 500; color: var(--tinta-suave); }
+.ava-dientin { width: 1.15em; height: 1.15em; object-fit: contain; vertical-align: -.15em; display: inline-block; }

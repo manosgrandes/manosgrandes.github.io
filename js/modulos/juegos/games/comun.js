@@ -9,7 +9,7 @@ const decoracion = () => `
   <span class="deco-flota" aria-hidden="true" style="left:6%;top:12%">✨</span>
   <span class="deco-flota" aria-hidden="true" style="right:8%;top:18%;animation-delay:.8s">⭐</span>
   <span class="deco-flota" aria-hidden="true" style="left:10%;bottom:14%;animation-delay:1.4s">🎈</span>
-  <span class="deco-flota" aria-hidden="true" style="right:12%;bottom:10%;animation-delay:.4s">🦷</span>`;
+  <span class="deco-flota" aria-hidden="true" style="right:12%;bottom:10%;animation-delay:.4s"><img src="img/dientin-nuevo.webp" alt="" style="width:2.2rem"></span>`;
 
 export function pantallaInicio(zona, { titulo, instrucciones, alEmpezar, icono = '🎮' }) {
   zona.innerHTML = `

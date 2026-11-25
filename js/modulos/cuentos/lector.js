@@ -3,6 +3,7 @@
 import { CUENTOS_BASE } from './datos.js';
 import { idb } from '../../nucleo/idb.js';
 import { dientin } from '../../nucleo/character.js';
+import { personaje, personajeDeEmoji } from '../../nucleo/personajes.js';
 import { leer, detener, vozDisponible } from '../../nucleo/speech.js';
 import { perfiles, progreso } from '../../nucleo/store.js';
 import { esc, aviso, confeti, sonido, youtubeSinCookies } from '../../nucleo/util.js';
@@ -16,10 +17,32 @@ async function cargar(origen, id) {
   return c && { ...c, autor: c.autor_texto, video: c.video_url };
 }
 
-function escena(e) {
+/**
+ * Escena dibujada: los emojis de personas se convierten en personajes ilustrados,
+ * y el protagonista del cuento aparece junto a Dientín aunque la página no lo nombre.
+ */
+function escena(e, cuento) {
+  const reparto = cuento?.reparto || [];
+  const elenco = [];
+  const decoracion = [];
+  for (const x of e.emojis || []) {
+    const tipo = personajeDeEmoji(x);
+    if (tipo && !elenco.some((p) => p.tipo === tipo)) elenco.push(reparto.find((p) => p.tipo === tipo) || { tipo });
+    else if (!tipo) decoracion.push(x);
+  }
+  // El protagonista acompaña cada página (máximo tres personajes además de Dientín).
+  if (reparto[0] && !elenco.some((p) => p.tipo === reparto[0].tipo)) elenco.unshift(reparto[0]);
+  const lista = elenco.slice(0, 3);
+  const animoPersonaje = (p) => (p.tipo === 'bacteria' ? (e.animo === 'triste' ? 'feliz' : 'sorpresa') : e.animo);
+  const figuras = lista.map((p, i) => `<span class="escena-personaje" style="--i:${i}">${personaje(p.tipo, { animo: animoPersonaje(p), tam: p.tipo === 'bebe' ? 84 : 104, semilla: cuento?.id || '', nombre: p.nombre })}</span>`);
+  const mitad = Math.ceil(figuras.length / 2);
   return `<div class="escena" style="background:${esc(e.fondo)}">
-    <div class="emojis" aria-hidden="true">${(e.emojis || []).map((x) => `<span>${x}</span>`).join('')}</div>
-    ${dientin({ tam: 170, animo: e.animo, cepillo: e.cepillo, clase: 'rebote' })}
+    <div class="emojis" aria-hidden="true">${decoracion.map((x) => `<span>${x}</span>`).join('')}</div>
+    <div class="escena-elenco">
+      ${figuras.slice(0, mitad).join('')}
+      ${dientin({ tam: lista.length ? 140 : 170, animo: e.animo, cepillo: e.cepillo, clase: 'rebote' })}
+      ${figuras.slice(mitad).join('')}
+    </div>
   </div>`;
 }
 
@@ -90,7 +113,7 @@ export async function render(app, [origen, id]) {
   const pintar = () => {
     detener();
     const pag = paginas[n];
-    const visual = pag.escena ? escena(pag.escena) : pag.imagen ? `<img class="ilustracion" src="${esc(pag.imagen)}" alt="Ilustración de la página ${n + 1}">` : '';
+    const visual = pag.escena ? escena(pag.escena, cuento) : pag.imagen ? `<img class="ilustracion" src="${esc(pag.imagen)}" alt="Ilustración de la página ${n + 1}">` : '';
     const clase = !pag.texto ? 'solo-imagen' : !visual ? 'solo-texto' : '';
     $p.innerHTML = `<article class="pagina ${clase}" style="--zoom:${zoom}">
       ${visual ? `<div>${visual}</div>` : ''}

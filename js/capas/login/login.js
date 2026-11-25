@@ -6,7 +6,7 @@
 import { perfiles, progreso, AVATARES } from '../../nucleo/store.js';
 import { sesion } from '../../nucleo/sesion.js';
 import { nubeActiva } from '../../config.js';
-import { esc, aviso, $ } from '../../nucleo/util.js';
+import { esc, aviso, $, avatarHTML } from '../../nucleo/util.js';
 import { leer, detener } from '../../nucleo/speech.js';
 import { icono } from '../../nucleo/iconos.js';
 import { iniciarFondo } from './fondo.js';
@@ -68,7 +68,7 @@ export function render(raiz, params) {
           <h1>¡Bienvenido!</h1><p>Elige cómo quieres entrar.</p>
         </header>
 
-        ${actual ? `<a class="lg-continuar" href="${destino}"><span class="lg-continuar-ava">${esc(actual.avatar)}</span><span><small>Sesión abierta</small><strong>Continuar como ${esc(actual.nombre)}</strong></span>${icono('flecha', { tam: 18 })}</a>` : ''}
+        ${actual ? `<a class="lg-continuar" href="${destino}"><span class="lg-continuar-ava">${avatarHTML(actual.avatar)}</span><span><small>Sesión abierta</small><strong>Continuar como ${esc(actual.nombre)}</strong></span>${icono('flecha', { tam: 18 })}</a>` : ''}
 
         <div class="lg-pestanas" role="tablist" aria-label="Tipo de ingreso">
           <span class="lg-indicador" aria-hidden="true"></span>
@@ -107,14 +107,14 @@ export function render(raiz, params) {
     $('#panel-nino', raiz).innerHTML = `
       ${lista.length ? `<div class="lg-sub-fila"><p class="lg-sub">¿Quién va a jugar hoy?</p></div>
         <div class="lg-perfiles ${lista.length > 5 ? 'muchos' : ''}">${lista.map((p, i) => `<button class="lg-perfil" data-id="${p.id}" style="--i:${i};--tono:${TONOS[i % TONOS.length]}">
-          <span class="lg-perfil-ava">${esc(p.avatar)}</span><strong>${esc(p.apodo)}</strong><span class="lg-estrellas">⭐ ${progreso.resumen(p.id).totalEstrellas}</span></button>`).join('')}
+          <span class="lg-perfil-ava">${avatarHTML(p.avatar)}</span><strong>${esc(p.apodo)}</strong><span class="lg-estrellas">⭐ ${progreso.resumen(p.id).totalEstrellas}</span></button>`).join('')}
           <button class="lg-perfil lg-perfil-nuevo" id="nuevo-perfil" style="--i:${lista.length}"><span class="lg-perfil-ava">${icono('mas', { tam: 26 })}</span><strong>Soy nuevo</strong><span class="lg-estrellas">Crear perfil</span></button>
         </div>` : ''}
       <form id="form-nino" class="lg-form lg-form-nino" ${lista.length ? 'hidden' : ''}>
         <div class="lg-sub-fila">${lista.length ? `<button type="button" class="lg-oir" id="cancelar-nuevo" aria-label="Volver a los perfiles">${icono('atras', { tam: 18 })}</button>` : ''}<p class="lg-sub">${lista.length ? 'Crea tu perfil' : '¡Crea tu perfil para empezar!'}</p></div>
         <label class="lg-campo"><span>Tu apodo</span><input id="apodo" required maxlength="20" placeholder="Un apodo divertido, no tu nombre" autocomplete="off"></label>
         <fieldset class="lg-avatares"><legend>Escoge tu dibujo</legend>
-          <div class="avatares">${AVATARES.map((a, i) => `<label><input type="radio" name="avatar" value="${a}" ${i === 0 ? 'checked' : ''}><span>${a}</span></label>`).join('')}</div>
+          <div class="avatares">${AVATARES.map((a, i) => `<label><input type="radio" name="avatar" value="${a}" ${i === 0 ? 'checked' : ''}><span>${avatarHTML(a)}</span></label>`).join('')}</div>
         </fieldset>
         ${nubeActiva() ? '<details class="lg-aula"><summary>¿Tienes un código de aula?</summary><input id="aula" maxlength="6" placeholder="Te lo da tu profe" aria-label="Código del aula" style="text-transform:uppercase"></details>' : ''}
         <button class="btn btn-grande lg-ancho">¡Entrar a jugar! ${icono('flecha', { tam: 18 })}</button>
@@ -198,7 +198,7 @@ export function render(raiz, params) {
           <label class="lg-campo"><span>Correo</span><input id="correo" type="email" required autocomplete="email" placeholder="tucorreo@ejemplo.com"></label>
           <label class="lg-campo"><span>Contraseña</span>
             <span class="lg-clave"><input id="clave" type="password" required autocomplete="current-password" placeholder="••••••••"><button type="button" id="ver" aria-label="Mostrar contraseña">${icono('ojo', { tam: 20 })}</button></span></label>
-          <button class="btn btn-grande lg-ancho">Iniciar sesión</button>
+          <button class="btn btn-grande lg-ancho lg-brilla">Iniciar sesión</button>
           <div class="lg-enlaces"><button type="button" id="olvide">¿Olvidaste tu contraseña?</button><button type="button" id="a-registro">Crear cuenta</button></div>
         </form>
         <details class="lg-sin-cuenta"><summary>Entrar sin cuenta</summary>${formLocal}</details>`

@@ -1,7 +1,7 @@
 // Service worker: permite usar el sitio sin internet (juegos, cuentos, guías).
 // Al cambiar archivos del sitio, sube el número de VERSION para que se actualicen.
 
-const VERSION = 'mgdc-v60';
+const VERSION = 'mgdc-v64';
 const ARCHIVOS = [
   './', 'index.html', 'manifest.webmanifest', 'css/base.css', 'css/landing.css', 'css/login.css', 'css/modulos.css',
   'css/sistema.css', 'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
@@ -16,7 +16,7 @@ const ARCHIVOS = [
   'js/modulos/juegos/games/memoria.js', 'js/modulos/juegos/games/quiz.js', 'js/modulos/juegos/index.js',
   'js/modulos/juegos/juego.js', 'js/modulos/perfil/index.js', 'js/modulos/recordatorios/index.js', 'js/nucleo/character.js',
   'js/nucleo/cloud.js', 'js/nucleo/iconos.js', 'js/nucleo/ics.js', 'js/nucleo/idb.js', 'js/nucleo/sesion.js', 'js/nucleo/sofi.js',
-  'js/nucleo/speech.js', 'js/nucleo/store.js', 'js/nucleo/util.js',
+  'js/nucleo/speech.js', 'js/nucleo/store.js', 'js/nucleo/util.js', 'js/nucleo/personajes.js', 'img/dientin-nuevo.webp',
 ];
 const CDN = ['cdn.jsdelivr.net', 'esm.sh'];
 

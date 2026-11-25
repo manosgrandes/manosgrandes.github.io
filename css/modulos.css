@@ -249,3 +249,19 @@ tr:last-child td { border-bottom: 0; }
 /* Calendario imprimible */
 .calendario { width: 100%; border: 2px solid var(--tinta); }
 .calendario td, .calendario th { border: 1px solid var(--tinta); text-align: center; height: 52px; font-size: 1.2rem; }
+
+/* Cuentos: personajes ilustrados en cada escena */
+.escena { min-height: 300px; }
+.escena .emojis { align-items: flex-start; padding: 1rem 1.2rem; font-size: 2.3rem; }
+.escena .emojis span:nth-child(odd) { align-self: flex-start; }
+.escena .emojis span:nth-child(even) { margin-top: 1.6rem; }
+.escena .emojis .emo { width: 1em; height: 1em; }
+.escena-elenco { position: absolute; inset: auto 0 6% 0; display: flex; justify-content: center; align-items: flex-end; gap: clamp(.2rem, 2vw, 1rem); padding: 0 .6rem; }
+.escena-elenco .dientin { margin-bottom: 2px; }
+.escena-personaje { display: block; animation: personaje-entra .5s both; animation-delay: calc(var(--i) * 120ms); }
+.escena-personaje svg { display: block; width: clamp(84px, 13vw, 124px); height: auto; filter: drop-shadow(0 6px 8px rgba(60, 50, 110, .18)); }
+.escena-personaje:nth-child(odd) svg { animation: balanceo 3.2s ease-in-out infinite; }
+.escena-personaje:nth-child(even) svg { animation: balanceo 3.2s ease-in-out .8s infinite; }
+@keyframes personaje-entra { from { opacity: 0; transform: translateY(20px) scale(.9); } }
+@keyframes balanceo { 50% { transform: rotate(-3deg) translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { .escena-personaje, .escena-personaje svg { animation: none !important; } }

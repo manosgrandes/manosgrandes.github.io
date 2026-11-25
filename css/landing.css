@@ -320,7 +320,6 @@ body[data-capa="landing"] { display: block; background: #26304F; }
 @media (prefers-reduced-motion: reduce) { .libro-tapa, .libro-toca { animation: none; } .libro-tapa { transition: none; } }
 .libro-arte { width: 62%; }
 .libro-arte svg { display: block; width: 100%; height: auto; }
-.libro-emoji { display: grid; place-items: center; aspect-ratio: 1; font-size: clamp(4rem, 12vw, 5.5rem); border-radius: 50%; background: rgba(255, 255, 255, .55); }
 .libro-lomo { position: absolute; left: 0; top: 0; bottom: 0; width: 18px; border-radius: 12px 0 0 12px; background: var(--tinta-libro); opacity: .5; }
 
 /* Rutina de dos minutos */

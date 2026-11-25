@@ -4,6 +4,7 @@
 export const CUENTOS_BASE = [
   {
     id: 'monstruo-caries',
+    reparto: [{ tipo: 'nina', nombre: 'Sofía' }],
     titulo: 'Dientín y el monstruo de la Caries',
     tema: 'higiene',
     edad: '3 a 7 años',
@@ -23,6 +24,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'lonchera-arcoiris',
+    reparto: [{ tipo: 'nino', nombre: 'Tomás' }],
     titulo: 'La lonchera arcoíris',
     tema: 'alimentacion',
     edad: '4 a 8 años',
@@ -42,6 +44,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'manos-grandes',
+    reparto: [{ tipo: 'nina', nombre: 'Lucía' }, { tipo: 'abuelo', nombre: 'El abuelo Ramón' }],
     titulo: 'Manos grandes, dientes chiquitos',
     tema: 'familia',
     edad: '3 a 8 años',
@@ -61,6 +64,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'primer-diente-flojo',
+    reparto: [{ tipo: 'nina', nombre: 'Valentina' }],
     titulo: 'El primer diente flojo de Valentina',
     tema: 'familia',
     edad: '5 a 8 años',
@@ -80,6 +84,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'primera-visita-odontologo',
+    reparto: [{ tipo: 'nino', nombre: 'Samuel' }],
     titulo: 'Mi primera visita al odontólogo',
     tema: 'odontologo',
     edad: '3 a 7 años',
@@ -99,6 +104,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'cepi-cansado',
+    reparto: [{ tipo: 'nino', nombre: 'Martín' }],
     titulo: 'Cepi, el cepillo cansado',
     tema: 'higiene',
     edad: '4 a 8 años',
@@ -118,6 +124,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'fiesta-del-agua',
+    reparto: [{ tipo: 'nina', nombre: 'La niña de la familia Rojas' }],
     titulo: 'La gran fiesta del agua',
     tema: 'alimentacion',
     edad: '3 a 7 años',
@@ -137,6 +144,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'hilo-magico',
+    reparto: [{ tipo: 'nino', nombre: 'Diego' }, { tipo: 'abuela', nombre: 'La abuela Carmen' }],
     titulo: 'El hilo mágico de la abuela',
     tema: 'higiene',
     edad: '5 a 8 años',
@@ -155,6 +163,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'casco-valiente',
+    reparto: [{ tipo: 'nina', nombre: 'Juanita' }],
     titulo: 'Dientín y el casco valiente',
     tema: 'otro',
     edad: '4 a 8 años',
@@ -174,6 +183,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'dragon-sin-cepillo',
+    reparto: [{ tipo: 'dragon', nombre: 'Fuego, el dragón' }],
     titulo: 'El dragón que no quería cepillarse',
     tema: 'higiene',
     edad: '3 a 8 años',
@@ -193,6 +203,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'superheroes-calcio',
+    reparto: [{ tipo: 'nina', nombre: 'Sara' }],
     titulo: 'Los superhéroes del calcio',
     tema: 'alimentacion',
     edad: '4 a 8 años',
@@ -212,6 +223,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'sonrisa-del-abuelo',
+    reparto: [{ tipo: 'nina', nombre: 'Emilia' }, { tipo: 'abuelo', nombre: 'El abuelo Jorge' }],
     titulo: 'La sonrisa que se guarda en un vaso',
     tema: 'familia',
     edad: '4 a 8 años',
@@ -231,6 +243,7 @@ export const CUENTOS_BASE = [
   },
   {
     id: 'tetero-de-mateo',
+    reparto: [{ tipo: 'nino', nombre: 'Mateo' }],
     titulo: 'Mateo se despide del tetero',
     tema: 'familia',
     edad: '2 a 5 años',

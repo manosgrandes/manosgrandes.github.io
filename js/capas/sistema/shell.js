@@ -5,7 +5,7 @@
 import { GRUPOS, modulosPara } from './modulos.js';
 import { sesion } from '../../nucleo/sesion.js';
 import { nubeActiva } from '../../config.js';
-import { esc, $ } from '../../nucleo/util.js';
+import { esc, $, avatarHTML } from '../../nucleo/util.js';
 import { SOFI } from '../../nucleo/sofi.js';
 import { icono } from '../../nucleo/iconos.js';
 
@@ -44,6 +44,7 @@ export function montar(raiz) {
             <span class="sis-ava" id="u-ava"></span><span class="sis-u-txt"><strong id="u-nombre"></strong><small id="u-rol"></small></span>${icono('abajo', { tam: 16, clase: 'sis-u-flecha' })}
           </button>
           <div class="sis-menu-usuario" id="menu-usuario" role="menu" hidden>
+            <span id="menu-mi-espacio"></span>
             <a role="menuitem" href="#/entrar">${icono('cambiar', { tam: 18 })} Cambiar de usuario</a>
             <a role="menuitem" href="#/">${icono('web', { tam: 18 })} Ver la página de inicio</a>
             <button role="menuitem" id="salir">${icono('salir', { tam: 18 })} Salir del sistema</button>
@@ -127,7 +128,12 @@ function pintarMenu() {
   const raiz = raizActual;
   const s = sesion.actual();
   if (!raiz || !s) return;
-  const mods = modulosPara(s.tipo, esAdmin);
+  // "Mi perfil" y "Mi cuenta" viven en el menú del usuario (arriba a la derecha), no en la navegación.
+  const EN_MENU_USUARIO = ['perfil', 'cuenta'];
+  const todos = modulosPara(s.tipo, esAdmin);
+  const mods = todos.filter((m) => !EN_MENU_USUARIO.includes(m.id));
+  $('#menu-mi-espacio', raiz).innerHTML = todos.filter((m) => EN_MENU_USUARIO.includes(m.id))
+    .map((m) => `<a role="menuitem" class="sis-menu-destacado" href="#/app/${m.id}" ${m.id === moduloActivo ? 'aria-current="page"' : ''}>${icono(m.ico, { tam: 18 })} ${m.id === 'perfil' ? 'Configurar mi perfil' : 'Configurar mi cuenta'}</a>`).join('');
   const enlace = (m) => `<a href="#/app${m.id === 'inicio' ? '' : `/${m.id}`}" data-mod="${m.id}" style="--c:${m.color};--t:${m.tinte}" ${m.id === moduloActivo ? 'aria-current="page"' : ''}>
       <span class="sis-ico">${icono(m.ico, { tam: 18 })}</span><span>${esc(m.corto || m.titulo)}</span>${m.id === 'admin' && pendientesAdmin ? `<span class="sis-globo" aria-label="${pendientesAdmin} pendientes">${pendientesAdmin}</span>` : ''}</a>`;
   const grupos = Object.entries(GRUPOS).map(([g, nombre]) => {
@@ -136,7 +142,7 @@ function pintarMenu() {
   }).join('');
   $('#sis-nav', raiz).innerHTML = enlace(mods.find((m) => m.id === 'inicio')) + grupos;
 
-  const principales = ['inicio', 'juegos', 'cuentos', s.tipo === 'nino' ? 'perfil' : 'guias'];
+  const principales = ['inicio', 'juegos', 'cuentos', s.tipo === 'nino' ? 'recordatorios' : 'guias'];
   $('#tabbar', raiz).innerHTML = principales.map((id) => mods.find((m) => m.id === id)).filter(Boolean)
     .map((m) => `<a href="#/app${m.id === 'inicio' ? '' : `/${m.id}`}" data-mod="${m.id}" ${m.id === moduloActivo ? 'aria-current="page"' : ''}><span class="sis-ico">${icono(m.ico, { tam: 22 })}</span><small>${esc(m.corto || m.titulo)}</small></a>`).join('')
     + `<button type="button" id="tab-mas" aria-controls="lateral"><span class="sis-ico">${icono('menu', { tam: 22 })}</span><small>Más</small></button>`;
@@ -147,7 +153,7 @@ export function pintarUsuario() {
   const raiz = raizActual;
   const id = sesion.identidad();
   if (!raiz || !id) return;
-  $('#u-ava', raiz).textContent = id.avatar;
+  $('#u-ava', raiz).innerHTML = avatarHTML(id.avatar);
   $('#u-nombre', raiz).textContent = id.nombre;
   $('#u-rol', raiz).textContent = id.etiqueta;
 }

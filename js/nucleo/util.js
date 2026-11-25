@@ -122,3 +122,7 @@ export async function comprimirImagen(fuente, ancho = 1000, calidad = 0.8) {
   if (typeof fuente !== 'string') URL.revokeObjectURL(url);
   return c.toDataURL('image/jpeg', calidad);
 }
+
+/** Avatar del perfil como HTML: el diente se muestra con la ilustración de Dientín. */
+export const avatarHTML = (a) =>
+  a === '🦷' ? '<img class="ava-dientin" src="img/dientin-nuevo.webp" alt="Dientín">' : esc(a);
