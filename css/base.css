@@ -82,7 +82,9 @@ body[data-capa="sistema"] {
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; touch-action: pan-x pan-y; }
+/* Sin zoom en el celular: iPhone acerca la pantalla si un campo tiene letra menor de 16px. */
+@media (pointer: coarse) { input, select, textarea { font-size: max(16px, 1em); } }
 /* La página no se desplaza: el desplazamiento ocurre dentro de #raiz. Así, en el celular,
    la barra de direcciones del navegador no aparece y desaparece al bajar (la pantalla no "salta")
    ni se activa el gesto de recargar al tirar hacia abajo. */

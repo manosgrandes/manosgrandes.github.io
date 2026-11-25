@@ -84,6 +84,9 @@ if (CONFIG.cloudflareAnalyticsToken) {
 }
 
 // Funciona sin internet (PWA)
+// Sin zoom con dos dedos: el iPhone ignora user-scalable=no del viewport, así que se bloquea el gesto.
+document.addEventListener('gesturestart', (e) => e.preventDefault());
+
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   // Cuando se publica una versión nueva, recarga una vez para mostrarla de inmediato.
   const habiaVersion = Boolean(navigator.serviceWorker.controller);

@@ -18,7 +18,7 @@ export const MODULOS = [
   },
   {
     id: 'juegos', grupo: 'aprender', titulo: 'Juegos', icono: '🎮', ico: 'juegos', color: '#2F86C9', tinte: '#DCEFFC', roles: TODOS,
-    desc: 'Diez juegos para cuidar tu sonrisa y ganar estrellas.',
+    desc: 'Cinco juegos para cuidar tu sonrisa y ganar estrellas.',
     rutas: [
       [/^$/, () => import('../../modulos/juegos/index.js'), { encabezado: true }],
       [/^([\w-]+)$/, () => import('../../modulos/juegos/juego.js')],

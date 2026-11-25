@@ -7,11 +7,6 @@ const MODULOS = {
   memoria: () => import('./games/memoria.js'),
   bacterias: () => import('./games/bacterias.js'),
   quiz: () => import('./games/quiz.js'),
-  atrapa: () => import('./games/atrapa.js'),
-  pasos: () => import('./games/pasos.js'),
-  sombras: () => import('./games/sombras.js'),
-  musica: () => import('./games/musica.js'),
-  contar: () => import('./games/contar.js'),
 };
 
 export async function render(app, [id]) {

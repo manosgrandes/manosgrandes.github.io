@@ -29,11 +29,6 @@ export const JUEGOS = {
   'juego:memoria': 'Memoria de hábitos',
   'juego:bacterias': 'Atrapa las bacterias',
   'juego:quiz': 'Preguntas de Dientín',
-  'juego:atrapa': 'Lluvia de comida sana',
-  'juego:pasos': 'Paso a paso',
-  'juego:sombras': 'Las sombras de la sonrisa',
-  'juego:musica': 'Los dientes cantores',
-  'juego:contar': 'Cuenta con Dientín',
 };
 
 export const perfiles = {

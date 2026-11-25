@@ -7,7 +7,7 @@ import { perfiles, progreso, AVATARES } from '../../nucleo/store.js';
 import { sesion } from '../../nucleo/sesion.js';
 import { nubeActiva } from '../../config.js';
 import { esc, aviso, $, avatarHTML } from '../../nucleo/util.js';
-import { leer, detener } from '../../nucleo/speech.js';
+import { detener } from '../../nucleo/speech.js';
 import { icono } from '../../nucleo/iconos.js';
 import { iniciarFondo } from './fondo.js';
 import { temaGuardado, botonTema, conectarTema } from '../../nucleo/tema.js';
@@ -123,7 +123,6 @@ export function render(raiz, params) {
     raiz.querySelectorAll('[data-id]').forEach((b) => b.addEventListener('click', () => {
       const p = lista.find((x) => x.id === b.dataset.id);
       perfiles.activar(p.id);
-      leer(`¡Hola, ${p.apodo}!`);
       b.classList.add('elegido');
       dice(`¡Hola, ${p.apodo}! ¡A jugar!`);
       setTimeout(() => entrar('nino', {}, `¡Hola, ${p.apodo}!`), 450);

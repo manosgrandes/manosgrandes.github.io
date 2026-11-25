@@ -8,7 +8,7 @@ Es un **sitio estático**: HTML, CSS y JavaScript, sin compilación ni servidor 
 
 | Sección | Funciona sin nube (modo local) | Con nube gratuita (Supabase) |
 |---|---|---|
-| 10 juegos con estrellas y medallas | ✅ | ✅ y además envía el progreso al aula |
+| 5 juegos con estrellas y medallas | ✅ | ✅ y además envía el progreso al aula |
 | Cuentos de Dientín con narración en voz alta | ✅ | ✅ |
 | Cargar cuentos (PDF, EPUB, TXT, fotos, OCR) | ✅ se guardan en el dispositivo | ✅ biblioteca compartida con aprobación del administrador |
 | Perfiles de niños (apodo + avatar, sin datos personales) | ✅ | ✅ |
