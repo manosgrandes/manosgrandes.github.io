@@ -56,7 +56,8 @@ async function capaSistema(resto) {
   }
   const [shell, { resolver }] = await Promise.all([import('./capas/sistema/shell.js'), import('./capas/sistema/modulos.js')]);
   const destino = resolver(resto);
-  if (!destino || !destino.modulo.roles.includes(s.tipo)) {
+  // Cada ruta puede restringir más que su módulo (p. ej. cargar cuentos: solo adultos).
+  if (!destino || !destino.modulo.roles.includes(s.tipo) || (destino.opciones.roles && !destino.opciones.roles.includes(s.tipo))) {
     location.replace('#/app');
     return;
   }

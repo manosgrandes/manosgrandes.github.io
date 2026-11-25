@@ -18,7 +18,7 @@ export const MODULOS = [
   },
   {
     id: 'juegos', grupo: 'aprender', titulo: 'Juegos', icono: '🎮', ico: 'juegos', color: '#2F86C9', tinte: '#DCEFFC', roles: TODOS,
-    desc: 'Cepilla a Dientín, arma la lonchera y gana estrellas.',
+    desc: 'Diez juegos para cuidar tu sonrisa y ganar estrellas.',
     rutas: [
       [/^$/, () => import('../../modulos/juegos/index.js'), { encabezado: true }],
       [/^([\w-]+)$/, () => import('../../modulos/juegos/juego.js')],
@@ -29,7 +29,7 @@ export const MODULOS = [
     desc: 'Historias para leer y escuchar, y tus propios libros.',
     rutas: [
       [/^$/, () => import('../../modulos/cuentos/index.js'), { encabezado: true }],
-      [/^nuevo$/, () => import('../../modulos/cuentos/editor.js')],
+      [/^nuevo$/, () => import('../../modulos/cuentos/editor.js'), { roles: ['adulto'] }],
       [/^(local|nube|base)\/([\w-]+)$/, () => import('../../modulos/cuentos/lector.js')],
     ],
   },

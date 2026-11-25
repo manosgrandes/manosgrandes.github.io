@@ -3,11 +3,15 @@
 const sintesis = window.speechSynthesis;
 export const vozDisponible = () => Boolean(sintesis);
 
+// Prefiere voces naturales (neuronales) en español y femeninas para Sofi; si no hay, cualquiera en español.
+const NATURALES = /natural|online|neural|google/i;
+const FEMENINAS = /dalia|elvira|paloma|salom|sabina|helena|laura|paulina|m[oó]nica|lupe|camila|ximena|elena|francisca|catalina|valentina|female|mujer/i;
 function vozEspanol() {
-  const voces = sintesis.getVoices();
-  return voces.find((v) => /es[-_](CO|419|MX|US)/i.test(v.lang))
-    || voces.find((v) => v.lang?.toLowerCase().startsWith('es'))
-    || null;
+  const voces = sintesis.getVoices().filter((v) => v.lang?.toLowerCase().startsWith('es'));
+  if (!voces.length) return null;
+  const puntaje = (v) => (NATURALES.test(v.name) ? 4 : 0) + (FEMENINAS.test(v.name) ? 2 : 0)
+    + (/es[-_](CO|419|MX|US)/i.test(v.lang) ? 1 : 0);
+  return voces.sort((a, b) => puntaje(b) - puntaje(a))[0];
 }
 // Algunas plataformas cargan las voces tarde.
 sintesis?.addEventListener?.('voiceschanged', () => {});

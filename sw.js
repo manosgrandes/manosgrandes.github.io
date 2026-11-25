@@ -1,16 +1,17 @@
 // Service worker: permite usar el sitio sin internet (juegos, cuentos, guías).
 // Al cambiar archivos del sitio, sube el número de VERSION para que se actualicen.
 
-const VERSION = 'mgdc-v11';
+const VERSION = 'mgdc-v60';
 const ARCHIVOS = [
   './', 'index.html', 'manifest.webmanifest', 'css/base.css', 'css/landing.css', 'css/login.css', 'css/modulos.css',
   'css/sistema.css', 'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
-  'icons/cepillo.svg', 'img/sofi.webp', 'img/sofi-cuerpo.webp', 'img/sofi-brazo.webp', 'img/sofi-cara.webp', 'img/sofi-busto.webp', 'img/dientin.webp', 'js/app.js', 'js/capas/landing/landing.js',
-  'js/capas/login/login.js', 'js/capas/publico/privacidad.js', 'js/capas/sistema/inicio.js', 'js/capas/sistema/modulos.js',
+  'icons/cepillo.svg', 'img/sofi.webp', 'img/sofi-cuerpo.webp', 'img/sofi-brazo.webp', 'img/sofi-cara.webp', 'img/sofi-busto.webp', 'img/sofi-busto-cuerpo.webp', 'img/sofi-busto-mano.webp', 'img/sofi-busto-ojos.webp', 'img/dientin.webp', 'img/dientin-cuerpo.webp', 'img/dientin-mano.webp', 'img/sofi-ojos.webp', 'img/dientin-ojos.webp', 'img/enfermera-espalda.webp', 'img/enfermera-perfil.webp', 'img/enfermera-perfil-ojos.webp', 'video/ninos-diente.webp', 'js/app.js', 'js/capas/landing/landing.js', 'js/capas/landing/motor.js', 'js/capas/landing/ciudad.js',
+  'js/capas/landing/tunel.js', 'js/capas/landing/recorrido.js', 'js/capas/landing/resto.js', 'js/capas/landing/dibujos.js', 'js/capas/landing/edades.js',
+  'js/capas/login/fondo.js', 'js/capas/login/login.js', 'js/capas/publico/privacidad.js', 'js/capas/sistema/inicio.js', 'js/capas/sistema/modulos.js',
   'js/capas/sistema/shell.js', 'js/config.js', 'js/modulos/admin/index.js', 'js/modulos/contacto/index.js',
   'js/modulos/cuenta/index.js', 'js/modulos/cuentos/datos.js', 'js/modulos/cuentos/editor.js', 'js/modulos/cuentos/importer.js',
   'js/modulos/cuentos/index.js', 'js/modulos/cuentos/lector.js', 'js/modulos/docentes/index.js', 'js/modulos/foro/index.js',
-  'js/modulos/guias/articulo.js', 'js/modulos/guias/datos.js', 'js/modulos/guias/index.js', 'js/modulos/juegos/games/alimentos.js',
+  'js/modulos/guias/articulo.js', 'js/modulos/guias/datos.js', 'js/modulos/guias/index.js', 'js/modulos/juegos/games/alimentos.js', 'js/modulos/juegos/games/atrapa.js', 'js/modulos/juegos/games/pasos.js', 'js/modulos/juegos/games/sombras.js', 'js/modulos/juegos/games/musica.js', 'js/modulos/juegos/games/contar.js',
   'js/modulos/juegos/games/bacterias.js', 'js/modulos/juegos/games/cepillado.js', 'js/modulos/juegos/games/comun.js',
   'js/modulos/juegos/games/memoria.js', 'js/modulos/juegos/games/quiz.js', 'js/modulos/juegos/index.js',
   'js/modulos/juegos/juego.js', 'js/modulos/perfil/index.js', 'js/modulos/recordatorios/index.js', 'js/nucleo/character.js',
@@ -36,6 +37,9 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+
+  // Videos: directo a la red (necesitan peticiones por rangos que la caché no maneja bien).
+  if (url.pathname.endsWith('.mp4')) return;
 
   // Archivos del propio sitio: responde rápido desde caché y actualiza en segundo plano.
   if (url.origin === location.origin) {

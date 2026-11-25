@@ -1,6 +1,6 @@
 // Juego: Preguntas de Dientín (con lectura en voz alta).
 
-import { pantallaInicio, pantallaFinal } from './comun.js';
+import { pantallaInicio, pantallaFinal, festejo, sacudir } from './comun.js';
 import { barajar, sonido, esc } from '../../../nucleo/util.js';
 import { leer } from '../../../nucleo/speech.js';
 
@@ -36,7 +36,7 @@ export function iniciar(zona) {
         <div class="marcador"><span>❓ ${i + 1} / ${N}</span><span>✅ ${aciertos}</span></div>
         <div class="pila" style="max-width:700px;margin:0 auto">
           <div class="fila entre"><p class="pregunta" style="margin:0">${esc(q.p)}</p><button class="btn btn-mini" id="oir">🔊 Escuchar</button></div>
-          <div class="respuestas">${q.opciones.map((o, k) => `<button class="btn btn-claro" data-k="${k}">${'ABC'[k]}. ${esc(o.texto)}</button>`).join('')}</div>
+          <div class="respuestas">${q.opciones.map((o, k) => `<button class="btn btn-claro" data-k="${k}"><b>${'ABC'[k]}</b> ${esc(o.texto)}</button>`).join('')}</div>
         </div>`;
       const leerPregunta = () => leer(`${q.p} ${q.opciones.map((o, k) => `${'ABC'[k]}: ${o.texto}.`).join(' ')}`);
       zona.querySelector('#oir').addEventListener('click', leerPregunta);
@@ -47,8 +47,8 @@ export function iniciar(zona) {
           x.disabled = true;
           if (q.opciones[k].ok) x.classList.add('correcta');
         });
-        if (o.ok) { aciertos++; sonido('bien'); leer('¡Correcto!'); }
-        else { b.classList.add('incorrecta'); sonido('mal'); leer(`La respuesta es: ${q.opciones.find((x) => x.ok).texto}`); }
+        if (o.ok) { aciertos++; sonido('bien'); festejo(b, '¡Bien! ⭐'); leer('¡Correcto!'); }
+        else { b.classList.add('incorrecta'); sacudir(b); sonido('mal'); leer(`La respuesta es: ${q.opciones.find((x) => x.ok).texto}`); }
         espera = setTimeout(() => {
           i++;
           if (i < N) mostrar();

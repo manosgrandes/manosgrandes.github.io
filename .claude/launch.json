@@ -4,8 +4,8 @@
     {
       "name": "sitio",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5173", "--bind", "127.0.0.1"],
-      "port": 5173
+      "runtimeArgs": ["-m", "http.server", "5181", "--bind", "127.0.0.1"],
+      "port": 5181
     }
   ]
 }

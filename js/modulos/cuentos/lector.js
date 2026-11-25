@@ -6,6 +6,7 @@ import { dientin } from '../../nucleo/character.js';
 import { leer, detener, vozDisponible } from '../../nucleo/speech.js';
 import { perfiles, progreso } from '../../nucleo/store.js';
 import { esc, aviso, confeti, sonido, youtubeSinCookies } from '../../nucleo/util.js';
+import { sesion } from '../../nucleo/sesion.js';
 
 async function cargar(origen, id) {
   if (origen === 'base') return CUENTOS_BASE.find((c) => c.id === id);
@@ -35,6 +36,7 @@ function textoMarcable(texto) {
 }
 
 export async function render(app, [origen, id]) {
+  const esAdulto = sesion.actual()?.tipo === 'adulto';
   app.innerHTML = '<p class="tarjeta">Abriendo el cuento…</p>';
   const cuento = await cargar(origen, id);
   if (!cuento) {
@@ -53,7 +55,7 @@ export async function render(app, [origen, id]) {
   <div class="fila entre no-imprimir">
     <a class="btn btn-claro" href="#/app/cuentos">⬅ Cuentos</a>
     <div class="fila">
-      ${origen === 'local' ? `<a class="btn btn-mini" href="#/app/cuentos/nuevo?editar=${esc(id)}">✏️ Editar</a><button class="btn btn-mini btn-coral" id="borrar">🗑️ Borrar</button>` : ''}
+      ${origen === 'local' && esAdulto ? `<a class="btn btn-mini" href="#/app/cuentos/nuevo?editar=${esc(id)}">✏️ Editar</a><button class="btn btn-mini btn-coral" id="borrar">🗑️ Borrar</button>` : ''}
     </div>
   </div>
   <h1>${esc(cuento.titulo)}</h1>

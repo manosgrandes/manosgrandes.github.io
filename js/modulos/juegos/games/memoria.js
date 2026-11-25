@@ -1,6 +1,6 @@
 // Juego: Memoria de hábitos. Encontrar parejas.
 
-import { pantallaInicio, pantallaFinal } from './comun.js';
+import { pantallaInicio, pantallaFinal, festejo, sacudir } from './comun.js';
 import { barajar, sonido } from '../../../nucleo/util.js';
 import { leer } from '../../../nucleo/speech.js';
 
@@ -47,6 +47,7 @@ export function iniciar(zona) {
         parejas++;
         zona.querySelector('#par').textContent = parejas;
         sonido('bien');
+        festejo(d, '¡Pareja! ✨');
         leer(c.n);
         if (parejas === FICHAS.length) {
           const seg = Math.round((Date.now() - inicio) / 1000);
@@ -58,6 +59,7 @@ export function iniciar(zona) {
           }), 700);
         }
       } else {
+        sacudir(a); sacudir(d);
         espera = setTimeout(() => {
           [a, d].forEach((x) => { x.classList.remove('volteada'); x.setAttribute('aria-label', 'Carta oculta'); });
           abiertas = [];

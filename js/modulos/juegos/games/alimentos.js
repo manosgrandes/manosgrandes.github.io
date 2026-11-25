@@ -1,6 +1,6 @@
 // Juego: La lonchera saludable. Clasificar alimentos.
 
-import { pantallaInicio, pantallaFinal } from './comun.js';
+import { pantallaInicio, pantallaFinal, festejo, sacudir } from './comun.js';
 import { barajar, sonido } from '../../../nucleo/util.js';
 import { leer } from '../../../nucleo/speech.js';
 import { dientin } from '../../../nucleo/character.js';
@@ -48,6 +48,7 @@ export function iniciar(zona) {
         const bien = (b.dataset.r === 'si') === a.sano;
         if (bien) aciertos++;
         sonido(bien ? 'bien' : 'mal');
+        if (bien) festejo(b, '¡Bien! ⭐'); else sacudir(zona.querySelector('.alimento'));
         zona.querySelectorAll('[data-r]').forEach((x) => { x.disabled = true; });
         const por = zona.querySelector('#por');
         por.innerHTML = `<span style="display:inline-flex;align-items:center;gap:.5rem">${dientin({ tam: 50, animo: bien ? 'feliz' : 'sorpresa' })} ${bien ? '¡Correcto!' : '¡Uy!'} ${a.por}</span>`;

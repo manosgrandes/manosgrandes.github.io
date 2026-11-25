@@ -140,6 +140,7 @@ h3 { font-size: 1.15rem; }
 .e-alimentacion { background: var(--menta-claro); color: #0A6E51; }
 .e-familia { background: var(--coral-claro); color: #A72E41; }
 .e-otro { background: var(--lila-claro); color: #4B3DB8; }
+.e-odontologo { background: #E3F7F6; color: #0E6E68; }
 .estrellas { color: #E3A008; letter-spacing: .1em; font-size: 1.2em; }
 
 /* Formularios */
@@ -173,13 +174,27 @@ input[type=checkbox], input[type=radio] { width: auto; transform: scale(1.2); ma
 /* ---------- Sofi saludando (capas) ---------- */
 .sofi-saluda { position: relative; aspect-ratio: 720 / 1148; }
 .sofi-capa { position: absolute; inset: 0; width: 100%; height: 100%; }
-.sofi-mano { transform-origin: 18.3% 45.1%; animation: saludo 1.1s ease-in-out .5s 3 both; }
-.sofi-saluda.hablando .sofi-mano { animation: saludo .9s ease-in-out infinite; }
+.sofi-mano { transform-origin: 18.3% 45.1%; animation: saludo 1.1s ease-in-out .6s 2 both; }
+/* Al empezar a hablar saluda un par de veces, sin quedarse moviendo la mano todo el tiempo. */
+.sofi-saluda.saluda .sofi-mano { animation: saludo-suave 1.2s ease-in-out 0s 2 both; }
+@keyframes saludo-suave { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-9deg); } 70% { transform: rotate(6deg); } }
 @keyframes saludo {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-10deg); }
   75% { transform: rotate(8deg); }
 }
+
+/* ---------- Personajes en capas (parpadean y saludan) ---------- */
+.personaje { position: relative; }
+.personaje .capa { position: absolute; inset: 0; width: 100%; height: 100%; }
+.personaje .ojos { opacity: 0; transition: opacity 45ms ease-in; }
+.personaje.parpadeo .ojos { opacity: 1; transition-duration: 35ms; }
+.busto-sofi { aspect-ratio: 560 / 533; }
+.busto-mano { transform-origin: 16.4% 80.6%; }
+.busto-sofi.saluda .busto-mano { animation: saludo 1s ease-in-out .3s 2 both; }
+.dientin-vivo { aspect-ratio: 600 / 545; }
+.dientin-mano { transform-origin: 25.2% 57.5%; }
+.dientin-vivo.saluda .dientin-mano { animation: saludo-suave .9s ease-in-out 0s 2 both; }
 
 /* ---------- Dientín ---------- */
 .dientin { display: block; }

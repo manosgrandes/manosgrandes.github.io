@@ -1,8 +1,8 @@
 export function render(app) {
   app.innerHTML = `
   <header class="pub-cabecera">
-    <a class="marca" href="#/"><img src="icons/icon.svg" alt="" width="38" height="38"><span><strong>Manos Grandes</strong><small>Dientes Chiquitos</small></span></a>
     <a class="btn btn-claro" href="javascript:history.back()">← Volver</a>
+    <a class="marca" href="#/"><img src="icons/icon.svg" alt="" width="38" height="38"><span><strong>Manos Grandes</strong><small>Dientes Chiquitos</small></span></a>
   </header>
   <article class="articulo tarjeta pub-articulo">
     <h1>Privacidad y protección de datos</h1>

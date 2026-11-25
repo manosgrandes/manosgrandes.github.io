@@ -6,6 +6,7 @@ import { nubeActiva } from '../../config.js';
 import { perfiles, progreso } from '../../nucleo/store.js';
 import { esc, aviso } from '../../nucleo/util.js';
 import { dientinDice } from '../../nucleo/character.js';
+import { sesion } from '../../nucleo/sesion.js';
 
 const tarjeta = ({ href, titulo, tema, edad, icono, color, portada, extra = '', leido }) => `
   <a class="tarjeta cuento-tarjeta" href="${href}">
@@ -22,9 +23,11 @@ export async function render(app) {
   const p = perfiles.activo();
   const leidos = p ? progreso.resumen(p.id).mejor : {};
   let filtro = 'todos';
+  // Solo docentes y familias cargan cuentos; los niños solo leen lo que ya está disponible.
+  const esAdulto = sesion.actual()?.tipo === 'adulto';
 
   app.innerHTML = `
-  <div class="fila" style="justify-content:flex-end"><a class="btn btn-sol" href="#/app/cuentos/nuevo">➕ Cargar o crear un cuento</a></div>
+  ${esAdulto ? '<div class="fila" style="justify-content:flex-end"><a class="btn btn-sol" href="#/app/cuentos/nuevo">➕ Cargar o crear un cuento</a></div>' : ''}
   ${dientinDice('Escoge un cuento. Puedo leértelo en voz alta. ¡Léanlo en familia!')}
   <div class="fila" style="margin:1.2rem 0" role="group" aria-label="Filtrar por tema">
     <button class="btn btn-mini" data-f="todos">Todos</button>
@@ -44,6 +47,7 @@ export async function render(app) {
   let compartidos = [];
   const pintarLocales = () => {
     const lista = locales.filter((c) => filtro === 'todos' || c.tema === filtro);
+    if (!esAdulto && !lista.length) { app.querySelector('#locales').innerHTML = ''; return; }
     app.querySelector('#locales').innerHTML = `
       <h2 style="margin-top:2rem">Cuentos guardados en este dispositivo</h2>
       ${lista.length ? `<div class="rejilla">${lista.map((c) => tarjeta({

@@ -1,6 +1,6 @@
 // Juego: Atrapa las bacterias. Tocar bacterias antes de que desaparezcan; evitar los dulces.
 
-import { pantallaInicio, pantallaFinal } from './comun.js';
+import { pantallaInicio, pantallaFinal, festejo, sacudir } from './comun.js';
 import { sonido } from '../../../nucleo/util.js';
 
 const DURACION = 30;
@@ -49,8 +49,8 @@ export function iniciar(zona) {
       b.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         clearTimeout(quitar);
-        if (tipo === 'bacteria') { puntos += 10; atrapadas++; sonido('bien'); }
-        if (tipo === 'dulce') { puntos = Math.max(0, puntos - 15); sonido('mal'); }
+        if (tipo === 'bacteria') { puntos += 10; atrapadas++; sonido('bien'); festejo(b, '+10'); }
+        if (tipo === 'dulce') { puntos = Math.max(0, puntos - 15); sonido('mal'); festejo(b, '−15', false); sacudir(tablero); }
         if (tipo === 'cepillo') {
           const todas = [...tablero.querySelectorAll('.bicho[data-tipo="bacteria"]')];
           puntos += 10 * todas.length + 5;

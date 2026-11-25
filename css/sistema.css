@@ -198,3 +198,219 @@ body[data-capa="sistema"] .tarjeta { border: 0; border-radius: 24px; box-shadow:
 .tab-alerta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: space-between; background: #FCE4EE; border-radius: 22px; padding: .9rem 1.1rem; margin-bottom: 1.4rem; font-weight: 600; animation: vista-entra .4s; }
 .tab-alerta > span { display: inline-flex; align-items: center; gap: .5rem; }
 .tab-alerta .ico { color: #C9567F; }
+
+/* =====================================================================
+   Estilo "app infantil" del sistema (niños, docentes y familias)
+   Lavanda suave, tarjetas blancas muy redondeadas, violeta vivo,
+   chips en píldora, mosaicos con volumen y barra inferior tipo app.
+   Solo aplica dentro del sistema (body[data-capa="sistema"]).
+   ===================================================================== */
+body[data-capa="sistema"] {
+  --primario: #7B5CFA;
+  --primario-oscuro: #6845F0;
+  --primario-claro: #EEE9FF;
+  --acento: #7B5CFA;
+  --acento-texto: #6845F0;
+  --tinta: #24204A;
+  --tinta-suave: #6B6790;
+  --tinta-tenue: #A09BBE;
+  --linea: #EAE5FB;
+  --fondo: #F3F0FF;
+  --fondo-alt: #EAE4FF;
+  --violeta-grad: linear-gradient(135deg, #9C84FF 0%, #7B5CFA 55%, #6A48F2 100%);
+  --sombra-1: 0 2px 6px rgba(123, 92, 250, .07), 0 6px 16px -6px rgba(123, 92, 250, .12);
+  --sombra: 0 4px 10px rgba(123, 92, 250, .06), 0 18px 36px -14px rgba(123, 92, 250, .26);
+  --sombra-3: 0 6px 14px rgba(123, 92, 250, .08), 0 32px 64px -20px rgba(123, 92, 250, .34);
+  --anillo: 0 0 0 4px rgba(123, 92, 250, .22);
+  --radio: 26px;
+  --radio-chico: 16px;
+  background:
+    radial-gradient(45% 35% at 100% 0%, rgba(156, 132, 255, .16), transparent 70%),
+    radial-gradient(40% 30% at 0% 100%, rgba(242, 180, 204, .16), transparent 70%),
+    #F3F0FF;
+  background-attachment: fixed;
+}
+body[data-capa="sistema"] h1, body[data-capa="sistema"] h2, body[data-capa="sistema"] h3 { font-weight: 800; letter-spacing: -.02em; }
+
+/* ---------- Botones ---------- */
+body[data-capa="sistema"] .btn { border-radius: 999px; font-weight: 800; }
+body[data-capa="sistema"] .btn:not(.btn-claro, .btn-mini, .btn-menta, .btn-coral, .btn-sol, .btn-jugar):not(.zona-juego *) {
+  background: var(--violeta-grad); color: #fff;
+  box-shadow: 0 5px 0 #5A3BD9, 0 14px 24px -10px rgba(123, 92, 250, .7);
+}
+body[data-capa="sistema"] .btn:not(.btn-claro, .btn-mini, .btn-menta, .btn-coral, .btn-sol, .btn-jugar):not(.zona-juego *):hover { filter: brightness(1.06); }
+body[data-capa="sistema"] .btn-menta { box-shadow: 0 5px 0 #6FC39A, 0 12px 20px -10px rgba(47, 167, 122, .55); }
+body[data-capa="sistema"] .btn-coral { box-shadow: 0 5px 0 #F08A73, 0 12px 20px -10px rgba(233, 115, 95, .55); }
+body[data-capa="sistema"] .btn-sol { box-shadow: 0 5px 0 #F0BE55, 0 12px 20px -10px rgba(227, 160, 8, .5); }
+body[data-capa="sistema"] .btn:not(.btn-mini):active { transform: translateY(3px); }
+body[data-capa="sistema"] .btn-claro { --b: #fff; --b2: #FAF8FF; border: 0; box-shadow: var(--sombra-1); }
+body[data-capa="sistema"] .btn-claro:hover { box-shadow: var(--sombra); }
+
+/* Chips de filtro (píldoras) */
+body[data-capa="sistema"] .btn-mini:not(.zona-juego *) {
+  --b: #fff; --b2: #FAF8FF; --t: var(--tinta-suave);
+  min-height: 40px; padding: .45rem 1.15rem; font-weight: 700; box-shadow: var(--sombra-1);
+}
+body[data-capa="sistema"] .btn-mini.btn-sol,
+body[data-capa="sistema"] .btn-mini[aria-pressed="true"] {
+  background: var(--violeta-grad); color: #fff; box-shadow: 0 8px 18px -8px rgba(123, 92, 250, .8);
+}
+
+/* ---------- Tarjetas ---------- */
+body[data-capa="sistema"] .tarjeta { border: 0; border-radius: 26px; box-shadow: var(--sombra); background: #fff; }
+body[data-capa="sistema"] .seccion-tarjeta::before { display: none; }
+body[data-capa="sistema"] .seccion-tarjeta:hover,
+body[data-capa="sistema"] .tema:hover,
+body[data-capa="sistema"] .cuento-tarjeta:hover { transform: translateY(-4px); box-shadow: var(--sombra-3); border-color: transparent; }
+body[data-capa="sistema"] .seccion-tarjeta .icono {
+  border-radius: 22px; background: linear-gradient(160deg, #fff, var(--primario-claro));
+  box-shadow: inset 0 -5px 0 rgba(123, 92, 250, .12), inset 0 3px 0 #fff, 0 10px 18px -10px rgba(123, 92, 250, .55);
+}
+
+/* Cuentos: tapa redondeada dentro de la tarjeta, como en las apps infantiles */
+body[data-capa="sistema"] .cuento-tarjeta { padding: .6rem; border-radius: 28px; }
+body[data-capa="sistema"] .cuento-tarjeta .tapa { border-radius: 22px; border-bottom: 0; box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .05); }
+body[data-capa="sistema"] .cuento-tarjeta .info { padding: .8rem .7rem .6rem; }
+body[data-capa="sistema"] .pagina { border: 0; border-radius: 30px; box-shadow: var(--sombra); }
+body[data-capa="sistema"] .escena { border-radius: 24px; }
+
+/* Etiquetas */
+body[data-capa="sistema"] .etiqueta { font-weight: 800; padding: .22rem .75rem; }
+
+/* Globo de Dientín */
+body[data-capa="sistema"] .burbuja { border: 0; border-radius: 24px; padding: 1rem 1.3rem; font-weight: 700; box-shadow: var(--sombra); }
+body[data-capa="sistema"] .burbuja::before { border: 0; }
+
+/* Notas y avisos */
+body[data-capa="sistema"] .nota { border: 0; border-radius: 20px; box-shadow: inset 0 0 0 2px #F6E2AE; }
+body[data-capa="sistema"] .nota-info { box-shadow: inset 0 0 0 2px #D8D0FF; background: var(--primario-claro); }
+
+/* Formularios */
+body[data-capa="sistema"] input:not([type=checkbox]):not([type=radio]),
+body[data-capa="sistema"] select,
+body[data-capa="sistema"] textarea {
+  border: 2px solid transparent; background: #F7F5FF; border-radius: 16px; padding: .75rem 1rem;
+}
+body[data-capa="sistema"] input:not([type=checkbox]):not([type=radio]):hover,
+body[data-capa="sistema"] select:hover,
+body[data-capa="sistema"] textarea:hover { border-color: #E2DBFF; }
+body[data-capa="sistema"] input:focus, body[data-capa="sistema"] select:focus, body[data-capa="sistema"] textarea:focus { background: #fff; border-color: var(--primario); }
+
+/* Barras de progreso violeta */
+body[data-capa="sistema"] .barra { background: #ECE7FF; border: 0; height: 10px; }
+body[data-capa="sistema"] .barra > i { background: var(--violeta-grad); }
+
+/* Tablas y desplegables */
+body[data-capa="sistema"] .tabla-env { border: 0; border-radius: 22px; box-shadow: var(--sombra); }
+body[data-capa="sistema"] th { background: #F7F5FF; color: var(--tinta-suave); }
+body[data-capa="sistema"] details { border: 0; border-radius: 22px; box-shadow: var(--sombra-1); padding: 1rem 1.2rem; }
+body[data-capa="sistema"] details[open] { box-shadow: var(--sombra); }
+body[data-capa="sistema"] .mensaje-foro { border: 0; border-radius: 22px; box-shadow: var(--sombra-1); }
+
+/* Perfiles, avatares y medallas */
+body[data-capa="sistema"] .perfil-btn { border: 0; border-radius: 24px; box-shadow: var(--sombra-1); }
+body[data-capa="sistema"] .perfil-btn.activo { box-shadow: 0 0 0 3px var(--primario), var(--sombra); }
+body[data-capa="sistema"] .avatares span { border: 0; border-radius: 18px; background: #fff; box-shadow: var(--sombra-1); }
+body[data-capa="sistema"] .avatares input:checked + span { background: var(--primario-claro); box-shadow: 0 0 0 3px var(--primario); }
+body[data-capa="sistema"] .medalla { border: 0; border-radius: 22px; background: #fff; box-shadow: var(--sombra-1); }
+body[data-capa="sistema"] .medalla .icono {
+  width: 58px; height: 58px; margin: 0 auto .4rem; display: grid; place-items: center; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, #FFE6A8 75%); box-shadow: inset 0 -4px 0 rgba(200, 140, 20, .18), 0 8px 14px -8px rgba(200, 140, 20, .6);
+}
+
+/* ---------- Menú lateral ---------- */
+body[data-capa="sistema"] .sis-lateral { background: #fff; border-right: 0; box-shadow: 10px 0 40px -30px rgba(123, 92, 250, .5); padding: 1.3rem 1rem; }
+body[data-capa="sistema"] .sis-nav { gap: 6px; }
+body[data-capa="sistema"] .sis-nav a { padding: .55rem .65rem; border-radius: 20px; font-weight: 700; }
+body[data-capa="sistema"] .sis-nav a:hover { background: #F5F2FF; }
+body[data-capa="sistema"] .sis-nav a[aria-current="page"] { background: var(--violeta-grad); box-shadow: 0 12px 24px -10px rgba(123, 92, 250, .85); }
+body[data-capa="sistema"] .sis-ico { width: 38px; height: 38px; border-radius: 14px; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .05), inset 0 2px 0 rgba(255, 255, 255, .8); }
+body[data-capa="sistema"] .sis-nav a[aria-current="page"] .sis-ico { background: rgba(255, 255, 255, .25); box-shadow: none; }
+body[data-capa="sistema"] .sis-grupo { color: #B3AECD; font-weight: 800; }
+body[data-capa="sistema"] .sis-consejo { background: var(--violeta-grad); color: rgba(255, 255, 255, .9); border-radius: 24px; box-shadow: 0 16px 30px -14px rgba(123, 92, 250, .8); }
+body[data-capa="sistema"] .sis-consejo strong { color: #fff; }
+
+/* ---------- Barra superior ---------- */
+body[data-capa="sistema"] .sis-barra { background: rgba(243, 240, 255, .82); height: 74px; }
+body[data-capa="sistema"] .sis-boton-menu { width: 48px; height: 48px; box-shadow: var(--sombra-1); }
+body[data-capa="sistema"] .sis-usuario-btn { padding: .35rem .9rem .35rem .35rem; box-shadow: var(--sombra-1); }
+body[data-capa="sistema"] .sis-ava { width: 40px; height: 40px; background: radial-gradient(circle at 35% 30%, #fff, #FFE6A8 80%); box-shadow: inset 0 -3px 0 rgba(200, 140, 20, .15); }
+body[data-capa="sistema"] .sis-miga strong { font-weight: 800; }
+body[data-capa="sistema"] .sis-menu-usuario { border-radius: 24px; padding: .5rem; }
+body[data-capa="sistema"] .sis-menu-usuario a, body[data-capa="sistema"] .sis-menu-usuario button { border-radius: 16px; }
+
+/* ---------- Cabecera de módulo (banner de color con ilustración) ---------- */
+body[data-capa="sistema"] .mod-cabecera {
+  border-radius: 32px; padding: clamp(1.5rem, 3.5vw, 2.3rem) clamp(1.5rem, 3.5vw, 2.5rem);
+  background:
+    radial-gradient(circle at 92% 110%, rgba(255, 255, 255, .45) 0 18%, transparent 19%),
+    radial-gradient(circle at 6% 0%, rgba(255, 255, 255, .5) 0 12%, transparent 13%),
+    linear-gradient(120deg, color-mix(in srgb, var(--c) 32%, var(--t)) 0%, var(--t) 100%);
+  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .05), 0 18px 34px -18px color-mix(in srgb, var(--c) 75%, transparent);
+}
+body[data-capa="sistema"] .mod-cabecera h1 { font-size: clamp(1.8rem, 3.6vw, 2.4rem); font-weight: 900; }
+body[data-capa="sistema"] .mod-cabecera p { color: color-mix(in srgb, var(--tinta) 75%, var(--c)); font-weight: 600; }
+body[data-capa="sistema"] .mod-arte {
+  width: 104px; height: 104px; font-size: 3.4rem; border-radius: 32px; background: #fff;
+  box-shadow: inset 0 -6px 0 color-mix(in srgb, var(--c) 18%, transparent), 0 14px 26px -12px color-mix(in srgb, var(--c) 80%, transparent);
+  animation: flotar-arte 4s ease-in-out infinite;
+}
+@keyframes flotar-arte { 50% { transform: rotate(4deg) translateY(-6px); } }
+
+/* ---------- Inicio ---------- */
+body[data-capa="sistema"] .tab-bienvenida {
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at 12% 120%, rgba(255, 255, 255, .35) 0 16%, transparent 17%),
+    radial-gradient(40% 70% at 88% 100%, rgba(255, 196, 222, .75), transparent 70%),
+    linear-gradient(125deg, #E9E3FF 0%, #D6CBFF 50%, #C3B3FF 100%);
+}
+body[data-capa="sistema"] .tab-bienvenida h1 { font-weight: 900; }
+body[data-capa="sistema"] .tab-fecha { color: var(--primario-oscuro); font-weight: 800; }
+
+body[data-capa="sistema"] .tab-rapidos { border-radius: 30px; padding: 1.2rem; }
+body[data-capa="sistema"] .tab-rapidos .tab-burbuja {
+  width: 70px; height: 70px; border-radius: 24px; font-size: 2.2rem;
+  background: linear-gradient(160deg, #fff 0%, var(--t) 70%);
+  box-shadow: inset 0 -5px 0 color-mix(in srgb, var(--c) 20%, transparent), inset 0 3px 0 #fff, 0 10px 18px -10px color-mix(in srgb, var(--c) 70%, transparent);
+}
+body[data-capa="sistema"] .tab-rapidos a:hover .tab-burbuja { animation: brinco-sis .6s; }
+@keyframes brinco-sis { 30% { transform: translateY(-8px) rotate(-6deg); } 60% { transform: translateY(0) rotate(4deg); } }
+
+body[data-capa="sistema"] .tab-consejo { border-radius: 30px; background: radial-gradient(60% 90% at 100% 0%, rgba(255, 255, 255, .25), transparent 60%), var(--violeta-grad); }
+body[data-capa="sistema"] .tab-progreso dd { font-weight: 900; color: var(--tinta); }
+body[data-capa="sistema"] .tab-progreso dl > div { border-left-color: #EFEBFF; }
+body[data-capa="sistema"] .tab-titulo h2 { font-weight: 900; }
+body[data-capa="sistema"] .tab-titulo a { color: var(--primario); font-weight: 800; }
+
+body[data-capa="sistema"] .tab-modulo { border-radius: 28px; padding: 1rem 1.1rem 1rem 1rem; }
+body[data-capa="sistema"] .tab-modulo:hover { transform: translateY(-4px); }
+body[data-capa="sistema"] .tab-mosaico {
+  width: 74px; height: 74px; border-radius: 24px; font-size: 2.3rem;
+  background: linear-gradient(160deg, #fff 0%, var(--t) 70%);
+  box-shadow: inset 0 -5px 0 color-mix(in srgb, var(--c) 20%, transparent), inset 0 3px 0 #fff, 0 10px 18px -10px color-mix(in srgb, var(--c) 70%, transparent);
+}
+body[data-capa="sistema"] .tab-modulo-txt strong { font-weight: 800; }
+body[data-capa="sistema"] .tab-ir { width: 44px; height: 44px; background: var(--violeta-grad); box-shadow: 0 4px 0 #5A3BD9, 0 10px 18px -8px rgba(123, 92, 250, .9); }
+
+body[data-capa="sistema"] .tab-medallas { border-radius: 30px; }
+body[data-capa="sistema"] .tab-medalla .tab-burbuja {
+  width: 66px; height: 66px; background: radial-gradient(circle at 35% 30%, #fff, var(--t) 75%);
+  box-shadow: inset 0 -4px 0 rgba(200, 140, 20, .18), 0 10px 16px -10px rgba(200, 140, 20, .7);
+}
+body[data-capa="sistema"] .tab-alerta { border-radius: 24px; box-shadow: var(--sombra-1); }
+
+/* ---------- Barra inferior tipo app (celular) ---------- */
+@media (max-width: 960px) {
+  body[data-capa="sistema"] .sis-tabbar { border-radius: 30px 30px 26px 26px; padding: .5rem .4rem; box-shadow: 0 -4px 30px -10px rgba(123, 92, 250, .35); }
+  body[data-capa="sistema"] .sis-tabbar a, body[data-capa="sistema"] .sis-tabbar button { color: #B3AECD; }
+  body[data-capa="sistema"] .sis-tabbar .sis-ico { width: 52px; height: 34px; box-shadow: none; }
+  body[data-capa="sistema"] .sis-tabbar a[aria-current="page"] { color: var(--primario); }
+  body[data-capa="sistema"] .sis-tabbar a[aria-current="page"] .sis-ico { background: var(--violeta-grad); color: #fff; box-shadow: 0 8px 14px -6px rgba(123, 92, 250, .8); }
+  body[data-capa="sistema"] .sis-tabbar small { font-weight: 800; }
+  body[data-capa="sistema"] .mod-arte { width: 76px; height: 76px; font-size: 2.4rem; border-radius: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-capa="sistema"] .mod-arte { animation: none; }
+}

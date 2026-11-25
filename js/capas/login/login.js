@@ -7,9 +7,24 @@ import { perfiles, progreso, AVATARES } from '../../nucleo/store.js';
 import { sesion } from '../../nucleo/sesion.js';
 import { nubeActiva } from '../../config.js';
 import { esc, aviso, $ } from '../../nucleo/util.js';
-import { leer } from '../../nucleo/speech.js';
-import { DIENTIN } from '../../nucleo/sofi.js';
+import { leer, detener } from '../../nucleo/speech.js';
 import { icono } from '../../nucleo/iconos.js';
+import { iniciarFondo } from './fondo.js';
+import { temaGuardado, botonTema, conectarTema } from '../../nucleo/tema.js';
+
+// «¿Sabías que…?»: datos tomados de las guías del sitio, cada uno con un dibujo animado.
+const SABIAS = [
+  [`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#2E2A5C"/><path class="d-luna" d="M38 16 A16 16 0 1 0 48 40 A12 12 0 1 1 38 16 Z" fill="#FFD98A"/><circle class="d-titila" cx="18" cy="20" r="2" fill="#fff"/><circle class="d-titila d-tarde" cx="22" cy="44" r="1.6" fill="#fff"/></svg>`,
+    'El cepillado de la <b>noche</b> es el más importante del día.'],
+  [`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#E2F8EC"/><rect x="8" y="34" width="40" height="8" rx="4" fill="#75BDF2"/><rect x="36" y="26" width="20" height="10" rx="3" fill="#fff" stroke="#75BDF2" stroke-width="2"/><circle class="d-late" cx="46" cy="22" r="5" fill="#7FCBA4"/></svg>`,
+    'De 3 a 6 años, la crema dental con flúor va del tamaño de una <b>arveja</b>.'],
+  [`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#E2F5FD"/><g class="d-sube"><circle cx="26" cy="38" r="5" fill="#fff"/><circle cx="36" cy="32" r="4" fill="#fff"/><circle cx="30" cy="26" r="3" fill="#fff"/></g><path d="M18 46 Q32 54 46 46" stroke="#75BDF2" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`,
+    'Escupe la espuma <b>sin enjuagarte</b> con mucha agua: así el flúor sigue protegiendo.'],
+  [`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#FFF1CF"/><path d="M22 18 L42 18 L39 48 C39 51 25 51 25 48 Z" fill="#fff" stroke="#9ED3F7" stroke-width="3"/><path class="d-ola" d="M24 30 L40 30 L38 46 C38 48 26 48 26 46 Z" fill="#9ED3F7"/></svg>`,
+    'Para calmar la sed, lo mejor es el <b>agua</b>.'],
+  [`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#FFE8EA"/><g class="d-salta"><path d="M22 24 C22 16 30 16 32 20 C34 16 42 16 42 24 C42 32 39 36 38 44 C37 48 34 47 33 42 C32 47 29 48 28 44 C27 36 22 32 22 24 Z" fill="#fff" stroke="#F2B4CC" stroke-width="2.5"/></g><circle cx="46" cy="18" r="8" fill="#E9735F"/><text x="46" y="22" text-anchor="middle" font-size="10" font-weight="800" fill="#fff" font-family="sans-serif">1</text></svg>`,
+    'La primera visita al odontólogo es cuando sale el <b>primer diente</b> o antes del primer año.'],
+];
 
 export function render(raiz, params) {
   const volver = params.get('volver');
@@ -17,41 +32,40 @@ export function render(raiz, params) {
   let pestana = params.has('registro') || params.get('como') === 'adulto' ? 'adulto' : 'nino';
   const actual = sesion.identidad();
 
+  const oscuro = temaGuardado();
+
   raiz.innerHTML = `
-  <div class="lg">
+  <div class="lg" data-tema="${oscuro ? 'oscuro' : 'claro'}">
     <section class="lg-arte">
-      <a class="marca" href="#/"><img src="icons/icon.svg" alt="" width="38" height="38"><span><strong>Manos Grandes</strong><small>Dientes Chiquitos</small></span></a>
-      <div class="lg-arte-txt">
-        <p class="lg-antetitulo">Bienvenidos</p>
-        <h2>Cuidar la sonrisa se aprende <span>juntos</span>.</h2>
-        <p>Juegos, cuentos y guías para niñas, niños, familias y docentes.</p>
-      </div>
       <div class="lg-vivo" aria-hidden="true">
         <span class="lg-mancha m1"></span><span class="lg-mancha m2"></span><span class="lg-mancha m3"></span><span class="lg-mancha m4"></span>
-        <div class="lg-burbujas" id="lg-burbujas"></div>
+        <canvas class="lg-red" id="lg-red"></canvas>
       </div>
-      <div class="lg-escena" id="lg-escena">
-        <div class="lg-aro" data-prof="8" aria-hidden="true"></div>
-        <div class="lg-aro lg-aro2" data-prof="14" aria-hidden="true"></div>
-        <span class="lg-flota f1" data-prof="22" aria-hidden="true">🍎</span>
-        <span class="lg-flota f2" data-prof="28" aria-hidden="true">⭐</span>
-        <span class="lg-flota f3" data-prof="18" aria-hidden="true">💖</span>
-        <span class="lg-flota f4" data-prof="24" aria-hidden="true">✨</span>
-        <div class="lg-chip c1" data-prof="16" aria-hidden="true"><span>⭐</span><b>+3</b> estrellas</div>
-        <div class="lg-chip c2" data-prof="20" aria-hidden="true"><span>🎮</span>5 juegos</div>
-        <div class="lg-personaje" data-prof="5">
-          <img class="lg-dientin" src="${DIENTIN.img}" width="${DIENTIN.ancho}" height="${DIENTIN.alto}" alt="Dientín, el diente amigo, con su cepillo">
-          <div class="lg-globo" aria-live="polite"><p id="dice">¿Quién va a entrar hoy?</p></div>
+      <div class="lg-centro">
+        <div class="lg-logo">
+          <video class="lg-video" id="lg-video" src="video/dientin-hola.mp4" poster="video/dientin-hola.webp" playsinline preload="auto" aria-label="Dientín saluda y da la bienvenida"></video>
+          <p id="dice" class="sr" aria-live="polite">¿Quién va a entrar hoy?</p>
         </div>
-        <div class="lg-piso" aria-hidden="true"></div>
+        <h2 class="lg-titulo">Manos Grandes,<br><span>Dientes Chiquitos</span></h2>
+        <p class="lg-lema">Juegos, cuentos y guías para cuidar la sonrisa en familia y en el aula.</p>
+        <section class="lg-sabias" aria-label="¿Sabías que…?">
+          <div class="lg-sabias-cab"><span class="lg-sabias-chip">¿Sabías que…?</span><span class="lg-sabias-barra" aria-hidden="true"><i></i></span></div>
+          <div class="lg-sabias-pista">
+            ${SABIAS.map(([dibujo, texto], i) => `<div class="lg-dato${i === 0 ? ' activo' : ''}" data-i="${i}" ${i ? 'aria-hidden="true"' : ''}><span class="lg-dato-dibujo" aria-hidden="true">${dibujo}</span><p>${texto}</p></div>`).join('')}
+          </div>
+          <div class="lg-sabias-puntos">${SABIAS.map((_, i) => `<button type="button" data-i="${i}" aria-label="Dato ${i + 1} de ${SABIAS.length}"${i === 0 ? ' aria-current="true"' : ''}></button>`).join('')}</div>
+        </section>
       </div>
     </section>
 
     <section class="lg-panel">
-      <a class="lg-volver" href="#/">${icono('atras', { tam: 16 })} Volver al inicio</a>
+      <div class="lg-arriba">
+        <a class="lg-volver" href="#/">${icono('atras', { tam: 18 })} Inicio</a>
+        ${botonTema(oscuro, 'lg-tema')}
+      </div>
       <div class="lg-tarjeta">
         <header class="lg-cabeza">
-          <h1>Entrar</h1><p>Elige cómo quieres ingresar al sistema.</p>
+          <h1>¡Bienvenido!</h1><p>Elige cómo quieres entrar.</p>
         </header>
 
         ${actual ? `<a class="lg-continuar" href="${destino}"><span class="lg-continuar-ava">${esc(actual.avatar)}</span><span><small>Sesión abierta</small><strong>Continuar como ${esc(actual.nombre)}</strong></span>${icono('flecha', { tam: 18 })}</a>` : ''}
@@ -62,8 +76,10 @@ export function render(raiz, params) {
           <button role="tab" id="tab-adulto" aria-controls="panel-adulto" data-p="adulto">${icono('escuela', { tam: 18 })} Docente o familia</button>
         </div>
 
-        <div role="tabpanel" id="panel-nino" aria-labelledby="tab-nino" class="lg-contenido"></div>
-        <div role="tabpanel" id="panel-adulto" aria-labelledby="tab-adulto" class="lg-contenido"></div>
+        <div class="lg-paneles">
+          <div role="tabpanel" id="panel-nino" aria-labelledby="tab-nino" class="lg-contenido"></div>
+          <div role="tabpanel" id="panel-adulto" aria-labelledby="tab-adulto" class="lg-contenido"></div>
+        </div>
 
         <div class="lg-separador"><span>o</span></div>
         <button class="btn btn-claro lg-ancho" id="invitado">Explorar como invitado</button>
@@ -72,13 +88,8 @@ export function render(raiz, params) {
     </section>
   </div>`;
 
-  const dice = (t) => {
-    const p = $('#dice', raiz);
-    p.classList.remove('lg-cambia');
-    void p.offsetWidth;
-    p.textContent = t;
-    p.classList.add('lg-cambia');
-  };
+  // Lo que Dientín dice queda guardado en el texto de la página.
+  const dice = (t) => { $('#dice', raiz).textContent = t; };
   const entrar = (tipo, datos, saludo) => {
     sesion.iniciar(tipo, datos);
     if (saludo) aviso(saludo);
@@ -93,16 +104,14 @@ export function render(raiz, params) {
     const lista = perfiles.lista();
     creando(!lista.length && pestana === 'nino');
     const TONOS = ['#FCE4EE', '#DCEFFC', '#DDF5EA', '#FFF1D2', '#ECE7FD', '#FFE6DF'];
-    const escuchar = (t) => `<button type="button" class="lg-oir" data-oir="${t}" aria-label="Escuchar: ${t}">${icono('sonido', { tam: 18 })}</button>`;
-    const pregunta = lista.length ? '¿Quién va a jugar hoy? Toca tu dibujo.' : '¡Hola! Crea tu perfil para empezar a jugar.';
     $('#panel-nino', raiz).innerHTML = `
-      ${lista.length ? `<div class="lg-sub-fila"><p class="lg-sub">¿Quién va a jugar hoy?</p>${escuchar(pregunta)}</div>
-        <div class="lg-perfiles">${lista.map((p, i) => `<button class="lg-perfil" data-id="${p.id}" style="--i:${i};--tono:${TONOS[i % TONOS.length]}">
+      ${lista.length ? `<div class="lg-sub-fila"><p class="lg-sub">¿Quién va a jugar hoy?</p></div>
+        <div class="lg-perfiles ${lista.length > 5 ? 'muchos' : ''}">${lista.map((p, i) => `<button class="lg-perfil" data-id="${p.id}" style="--i:${i};--tono:${TONOS[i % TONOS.length]}">
           <span class="lg-perfil-ava">${esc(p.avatar)}</span><strong>${esc(p.apodo)}</strong><span class="lg-estrellas">⭐ ${progreso.resumen(p.id).totalEstrellas}</span></button>`).join('')}
           <button class="lg-perfil lg-perfil-nuevo" id="nuevo-perfil" style="--i:${lista.length}"><span class="lg-perfil-ava">${icono('mas', { tam: 26 })}</span><strong>Soy nuevo</strong><span class="lg-estrellas">Crear perfil</span></button>
         </div>` : ''}
       <form id="form-nino" class="lg-form lg-form-nino" ${lista.length ? 'hidden' : ''}>
-        <div class="lg-sub-fila">${lista.length ? `<button type="button" class="lg-oir" id="cancelar-nuevo" aria-label="Volver a los perfiles">${icono('atras', { tam: 18 })}</button>` : ''}<p class="lg-sub">${lista.length ? 'Crea tu perfil' : '¡Crea tu perfil para empezar!'}</p>${escuchar('Escribe un apodo divertido y escoge tu dibujo.')}</div>
+        <div class="lg-sub-fila">${lista.length ? `<button type="button" class="lg-oir" id="cancelar-nuevo" aria-label="Volver a los perfiles">${icono('atras', { tam: 18 })}</button>` : ''}<p class="lg-sub">${lista.length ? 'Crea tu perfil' : '¡Crea tu perfil para empezar!'}</p></div>
         <label class="lg-campo"><span>Tu apodo</span><input id="apodo" required maxlength="20" placeholder="Un apodo divertido, no tu nombre" autocomplete="off"></label>
         <fieldset class="lg-avatares"><legend>Escoge tu dibujo</legend>
           <div class="avatares">${AVATARES.map((a, i) => `<label><input type="radio" name="avatar" value="${a}" ${i === 0 ? 'checked' : ''}><span>${a}</span></label>`).join('')}</div>
@@ -111,7 +120,6 @@ export function render(raiz, params) {
         <button class="btn btn-grande lg-ancho">¡Entrar a jugar! ${icono('flecha', { tam: 18 })}</button>
       </form>`;
 
-    $('#panel-nino', raiz).querySelectorAll('[data-oir]').forEach((b) => b.addEventListener('click', () => leer(b.dataset.oir, { tono: 1.25 })));
     raiz.querySelectorAll('[data-id]').forEach((b) => b.addEventListener('click', () => {
       const p = lista.find((x) => x.id === b.dataset.id);
       perfiles.activar(p.id);
@@ -282,53 +290,104 @@ export function render(raiz, params) {
   });
   $('#invitado', raiz).addEventListener('click', () => entrar('invitado', {}, 'Explorando como invitado. Crea un perfil para guardar tus estrellas.'));
 
+  // Modo claro / oscuro (se recuerda en este equipo).
+  conectarTema(raiz.querySelector('.lg'));
+
   pintarNino();
   pintarAdulto();
   cambiar(pestana);
   return animarArte(raiz);
 }
 
-/** Fondo vivo del lado izquierdo: burbujas, saltito de Dientín y profundidad con el mouse. */
+/** Lado izquierdo: red animada de sonrisas y Dientín que parpadea y saluda al pasar el mouse. Nada sigue al cursor. */
 function animarArte(raiz) {
+  const lg = raiz.querySelector('.lg');
+  const detenerFondo = iniciarFondo($('#lg-red', raiz), { oscuro: () => lg.dataset.tema === 'oscuro' });
+  const detenerVideo = videoDientin(raiz);
+  const detenerSabias = sabiasQue(raiz);
+  return () => { detenerFondo(); detenerVideo(); detenerSabias(); };
+}
+
+/**
+ * Video de Dientín con su voz: recibe al llegar al login, se calla al terminar
+ * (vuelve al primer cuadro) y se repite al pasar el cursor por encima.
+ * Los navegadores solo dejan reproducir con sonido si la persona ya tocó la página
+ * (por ejemplo, el botón "Entrar" del landing); si no, espera su primer toque o tecla.
+ */
+function videoDientin(raiz) {
+  const v = $('#lg-video', raiz);
+  const logo = raiz.querySelector('.lg-logo');
   const limpiezas = [];
-  const sinMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const zona = $('#lg-burbujas', raiz);
-  for (let i = 0; i < 18; i++) {
-    const b = document.createElement('span');
-    const t = 7 + Math.random() * 3;
-    b.style.cssText = `left:${Math.random() * 100}%;--s:${10 + Math.random() * 34}px;--t:${t}s;--x:${(Math.random() - 0.5) * 60}px;animation-delay:${-Math.random() * t}s`;
-    zona.append(b);
-  }
-  if (sinMovimiento) return () => {};
+  let terminoEn = 0;
+  let esperando = null;
 
-  // Dientín da un saltito de alegría cada cierto tiempo.
-  const dientin = raiz.querySelector('.lg-dientin');
-  const reloj = setInterval(() => {
-    if (!dientin?.isConnected) return;
-    dientin.classList.remove('salta');
-    void dientin.offsetWidth;
-    dientin.classList.add('salta');
-  }, 7000);
-  limpiezas.push(() => clearInterval(reloj));
+  const reproducir = () => {
+    detener();
+    v.currentTime = 0;
+    logo.classList.add('hablando');
+    return v.play();
+  };
+  const esperarToque = () => {
+    if (esperando) return;
+    const eventos = ['pointerdown', 'keydown', 'touchstart'];
+    esperando = () => { quitar(); reproducir().catch(() => {}); };
+    const quitar = () => { eventos.forEach((e) => window.removeEventListener(e, esperando, true)); esperando = null; };
+    eventos.forEach((e) => window.addEventListener(e, esperando, { capture: true, once: true }));
+    limpiezas.push(quitar);
+  };
 
-  // Profundidad: las capas se mueven distinto según el mouse.
-  const arte = raiz.querySelector('.lg-arte');
-  const capas = [...arte.querySelectorAll('[data-prof]')];
-  if (matchMedia('(pointer: fine)').matches) {
-    let pendiente = false;
-    const mover = (e) => {
-      if (pendiente) return;
-      pendiente = true;
-      requestAnimationFrame(() => {
-        const r = arte.getBoundingClientRect();
-        const dx = (e.clientX - r.left) / r.width - 0.5;
-        const dy = (e.clientY - r.top) / r.height - 0.5;
-        capas.forEach((c) => { const p = Number(c.dataset.prof); c.style.translate = `${-dx * p}px ${-dy * p}px`; });
-        pendiente = false;
-      });
-    };
-    arte.addEventListener('pointermove', mover);
-    limpiezas.push(() => arte.removeEventListener('pointermove', mover));
+  v.addEventListener('ended', () => {
+    logo.classList.remove('hablando');
+    v.currentTime = 0;
+    terminoEn = Date.now();
+  });
+  v.addEventListener('pause', () => logo.classList.remove('hablando'));
+
+  // Al pasar el cursor: vuelve a hablar si está callado (con una pausa corta para no repetirse sin parar).
+  const alPasar = () => {
+    if (!v.paused || Date.now() - terminoEn < 1200) return;
+    reproducir().catch(esperarToque);
+  };
+  logo.addEventListener('pointerenter', alPasar);
+  limpiezas.push(() => logo.removeEventListener('pointerenter', alPasar));
+
+  // Al llegar: intenta hablar de una vez.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    reproducir().catch(() => { logo.classList.remove('hablando'); esperarToque(); });
   }
+
+  limpiezas.push(() => { v.pause(); v.removeAttribute('src'); v.load(); });
   return () => limpiezas.forEach((f) => f());
+}
+
+/** «¿Sabías que…?»: cambia de dato cada 6 s, se pausa con el cursor encima y los puntos eligen uno. */
+function sabiasQue(raiz) {
+  const caja = raiz.querySelector('.lg-sabias');
+  if (!caja) return () => {};
+  const datos = [...caja.querySelectorAll('.lg-dato')];
+  const puntos = [...caja.querySelectorAll('.lg-sabias-puntos button')];
+  const barra = caja.querySelector('.lg-sabias-barra i');
+  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let i = 0;
+  let reloj = 0;
+  const mostrar = (k) => {
+    i = (k + datos.length) % datos.length;
+    datos.forEach((d, j) => { d.classList.toggle('activo', j === i); d.toggleAttribute('aria-hidden', j !== i); });
+    puntos.forEach((b, j) => b.toggleAttribute('aria-current', j === i));
+    barra.style.animation = 'none'; void barra.offsetWidth; barra.style.animation = '';
+  };
+  const seguir = () => { clearInterval(reloj); if (!quieto) reloj = setInterval(() => mostrar(i + 1), 6000); };
+  const alPunto = (e) => { const b = e.target.closest('button'); if (b) { mostrar(Number(b.dataset.i)); seguir(); } };
+  const pausa = () => { clearInterval(reloj); caja.classList.add('pausa'); };
+  const sigue = () => { caja.classList.remove('pausa'); mostrar(i); seguir(); };
+  caja.addEventListener('click', alPunto);
+  caja.addEventListener('pointerenter', pausa);
+  caja.addEventListener('pointerleave', sigue);
+  seguir();
+  return () => {
+    clearInterval(reloj);
+    caja.removeEventListener('click', alPunto);
+    caja.removeEventListener('pointerenter', pausa);
+    caja.removeEventListener('pointerleave', sigue);
+  };
 }
