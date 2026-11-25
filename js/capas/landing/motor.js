@@ -71,7 +71,10 @@ export async function cargarLibrerias() {
  */
 export function iniciarScroll({ gsap, ScrollTrigger, Lenis }) {
   ScrollTrigger.config({ ignoreMobileResize: true });
-  const lenis = new Lenis({ lerp: 0.1, anchors: { duration: 1.6 } });
+  // La página no se desplaza: lo hace #raiz (ver css/base.css). Lenis y ScrollTrigger trabajan sobre él.
+  const wrapper = document.getElementById('raiz');
+  ScrollTrigger.defaults({ scroller: wrapper });
+  const lenis = new Lenis({ wrapper, content: wrapper.firstElementChild, lerp: 0.1, anchors: { duration: 1.6 } });
   lenis.on('scroll', ScrollTrigger.update);
   const raf = (t) => lenis.raf(t * 1000);
   gsap.ticker.add(raf);

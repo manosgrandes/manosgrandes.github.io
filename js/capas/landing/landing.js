@@ -5,7 +5,7 @@
 // Con «reducir movimiento» (o si no cargan las librerías) se muestra como página normal.
 
 import { sesion } from '../../nucleo/sesion.js';
-import { esc } from '../../nucleo/util.js';
+import { esc, desplazador } from '../../nucleo/util.js';
 import { darVida } from '../../nucleo/sofi.js';
 import { clamp, span, smooth, lerp, inercia, cargarLibrerias, iniciarScroll, lienzo } from './motor.js';
 import { crearCiudad } from './ciudad.js';
@@ -105,7 +105,7 @@ function terminar(limpiezas, otra) {
  * `ir(y)` se cambia por el desplazamiento suave de Lenis cuando la animación está activa.
  */
 function conectarComunes(lp) {
-  const nav = { ir: (y) => scrollTo({ top: y, behavior: 'smooth' }), tarjeta: null };
+  const nav = { ir: (y) => desplazador().scrollTo({ top: y, behavior: 'smooth' }), tarjeta: null };
   const saltar = lp.querySelector('#lp-saltar');
   const main = lp.querySelector('#contenido');
   const alClic = (e) => {
@@ -125,7 +125,7 @@ function conectarComunes(lp) {
       const tj = lp.querySelector(`#${destino.dataset.ir}`);
       if (!tj) return;
       e.preventDefault();
-      nav.ir(nav.tarjeta ? nav.tarjeta(tj) : tj.getBoundingClientRect().top + scrollY - 90);
+      nav.ir(nav.tarjeta ? nav.tarjeta(tj) : tj.getBoundingClientRect().top + desplazador().scrollTop - 90);
     }
   };
   lp.addEventListener('click', alClic);
@@ -318,7 +318,7 @@ function montarVivo(lp, libs, nav) {
   // Teclado: si el foco cae en algo que el recorrido escondió, llevar la cámara hasta allí.
   // Se aplaza para que no lo anule el desplazamiento nativo que hace el navegador al enfocar.
   const irA = (y) => setTimeout(() => lenis.scrollTo(y, { duration: 0.9, force: true }), 60);
-  const absTop = (el) => el.getBoundingClientRect().top + scrollY;
+  const absTop = (el) => el.getBoundingClientRect().top + desplazador().scrollTop;
   // Posición de scroll en la que una tarjeta de la pila queda arriba y visible.
   const yTarjeta = (tj) => {
     const pila = tj.parentElement;
@@ -332,7 +332,7 @@ function montarVivo(lp, libs, nav) {
   const suave = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
   let enTelon = false;
   nav.ir = (y) => {
-    if (Math.abs(y - scrollY) < innerHeight * 2.5) {
+    if (Math.abs(y - lenis.scroll) < innerHeight * 2.5) {
       lenis.scrollTo(y, { duration: 1.2, easing: suave, force: true });
       return;
     }
@@ -347,7 +347,7 @@ function montarVivo(lp, libs, nav) {
   };
   escuchar(lp, 'focusin', (e) => {
     const el = e.target;
-    if (el.closest('.e1-hero') && scrollY > innerHeight * 0.1) irA(0);
+    if (el.closest('.e1-hero') && lenis.scroll > innerHeight * 0.1) irA(0);
     const tj = el.closest('.tj');
     if (tj) irA(yTarjeta(tj));
   });

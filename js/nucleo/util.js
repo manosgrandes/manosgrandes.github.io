@@ -8,6 +8,9 @@ export const esc = (valor) => String(valor ?? '').replace(/[&<>"']/g, (c) => MAP
 export const $ = (selector, raiz = document) => raiz.querySelector(selector);
 export const $$ = (selector, raiz = document) => [...raiz.querySelectorAll(selector)];
 
+/** Contenedor que se desplaza (la página en sí no se desplaza; ver css/base.css). */
+export const desplazador = () => document.getElementById('raiz') || document.scrollingElement;
+
 export const uid = () =>
   (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`);
 

@@ -67,7 +67,6 @@ export const ESCENAS_EDAD = {
       <path d="M186 150 Q200 162 214 150" stroke="${TINTA}" stroke-width="4" fill="none" stroke-linecap="round"/>
       <ellipse cx="172" cy="146" rx="7" ry="4" fill="#F59A9A" opacity=".6"/><ellipse cx="228" cy="146" rx="7" ry="4" fill="#F59A9A" opacity=".6"/>
     </g>
-    <g class="ae-senala"><path d="M118 150 L92 150 M104 138 L90 150 L104 162" stroke="#B8A5ED" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="200" y="282" text-anchor="middle" font-size="19" font-weight="900" fill="${TINTA}" font-family="sans-serif">Elige una edad para verla</text>
     ${estrella(296, 92, 12)}${estrella(316, 186, 8, '#F2B4CC', 'ae-titila ae-tarde')}${estrella(96, 236, 8, '#91D9B5', 'ae-titila ae-mas-tarde')}
   </svg>`,

@@ -82,10 +82,15 @@ body[data-capa="sistema"] {
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; }
+/* La página no se desplaza: el desplazamiento ocurre dentro de #raiz. Así, en el celular,
+   la barra de direcciones del navegador no aparece y desaparece al bajar (la pantalla no "salta")
+   ni se activa el gesto de recargar al tirar hacia abajo. */
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+#raiz { height: 100%; overflow-x: hidden; overflow-y: auto; overscroll-behavior: none; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
 body {
   margin: 0; font-family: var(--fuente); font-size: var(--letra); line-height: 1.6; color: var(--tinta);
-  background: var(--fondo); min-height: 100vh; display: flex; flex-direction: column;
+  background: var(--fondo);
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
 }
 img, svg { max-width: 100%; }
@@ -227,6 +232,7 @@ input[type=checkbox], input[type=radio] { width: auto; transform: scale(1.2); ma
 /* Impresión (guías y calendario) */
 @media print {
   .sis-lateral, .sis-barra, .sis-tabbar, .mod-cabecera, .no-imprimir, #avisos { display: none !important; }
+  html, body, #raiz { height: auto; overflow: visible; }
   body { background: #fff; }
   main { padding: 0; }
   .tarjeta { box-shadow: none; border: 1px solid #ccc; }

@@ -44,7 +44,7 @@ async function capaSimple(nombre, cargar) {
   document.title = 'Manos Grandes Dientes Chiquitos';
   raiz.innerHTML = '';
   limpiar = await vista.render(raiz, new URLSearchParams(location.hash.split('?')[1] || ''));
-  window.scrollTo({ top: 0, behavior: 'instant' });
+  raiz.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 /** Sistema: verifica la sesión, monta el armazón una vez y pinta el módulo pedido. */
@@ -69,7 +69,7 @@ async function capaSistema(resto) {
   const modulo = await destino.cargar();
   limpiar = await modulo.render(vista, destino.params);
   contenido.focus({ preventScroll: true });
-  window.scrollTo({ top: 0, behavior: 'instant' });
+  raiz.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 window.addEventListener('hashchange', navegar);

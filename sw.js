@@ -1,7 +1,7 @@
 // Service worker: permite usar el sitio sin internet (juegos, cuentos, guías).
 // Al cambiar archivos del sitio, sube el número de VERSION para que se actualicen.
 
-const VERSION = 'mgdc-v64';
+const VERSION = 'mgdc-v65';
 const ARCHIVOS = [
   './', 'index.html', 'manifest.webmanifest', 'css/base.css', 'css/landing.css', 'css/login.css', 'css/modulos.css',
   'css/sistema.css', 'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
