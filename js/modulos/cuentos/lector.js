@@ -1,10 +1,10 @@
-// Lector interactivo de cuentos: páginas, narración con resaltado, tamaño de letra y video.
+// Lector interactivo de cuentos: páginas, tamaño de letra y video.
 
 import { CUENTOS_BASE } from './datos.js';
 import { idb } from '../../nucleo/idb.js';
 import { dientin } from '../../nucleo/character.js';
 import { personaje, personajeDeEmoji } from '../../nucleo/personajes.js';
-import { leer, detener, vozDisponible } from '../../nucleo/speech.js';
+import { detener } from '../../nucleo/speech.js';
 import { perfiles, progreso } from '../../nucleo/store.js';
 import { esc, aviso, confeti, sonido, youtubeSinCookies } from '../../nucleo/util.js';
 import { sesion } from '../../nucleo/sesion.js';
@@ -70,9 +70,7 @@ export async function render(app, [origen, id]) {
   const video = youtubeSinCookies(cuento.video);
   let n = 0;
   let zoom = Number(localStorage.getItem('mgdc:zoom')) || 1;
-  let autoLeer = false;
   let registrado = false;
-  let vivo = true;
 
   app.innerHTML = `
   <div class="fila entre no-imprimir">
@@ -89,7 +87,6 @@ export async function render(app, [origen, id]) {
     <div class="controles-lector no-imprimir">
       <button class="btn btn-claro" id="ant" aria-label="Página anterior">⬅ Atrás</button>
       <div class="fila">
-        ${vozDisponible() ? '<button class="btn btn-menta" id="narrar">🔊 Leer en voz alta</button><label class="check chico" style="margin:0"><input type="checkbox" id="auto"> Pasar solo</label>' : ''}
         <button class="btn btn-mini" id="menos" aria-label="Letra más pequeña">A−</button>
         <button class="btn btn-mini" id="mas" aria-label="Letra más grande">A+</button>
       </div>
@@ -122,39 +119,16 @@ export async function render(app, [origen, id]) {
     app.querySelector('#contador').textContent = `Página ${n + 1} de ${paginas.length}`;
     app.querySelector('#ant').disabled = n === 0;
     app.querySelector('#sig').textContent = n === paginas.length - 1 ? '🎉 ¡Terminé!' : 'Adelante ➡';
-    if (autoLeer) narrar();
-  };
-
-  const narrar = async () => {
-    const pag = paginas[n];
-    if (!pag.texto) {
-      if (autoLeer) setTimeout(() => vivo && autoLeer && avanzar(), 2500);
-      return;
-    }
-    const spans = [...app.querySelectorAll('#texto span')];
-    const pagina = n;
-    await leer(pag.texto, {
-      alPalabra: (i) => {
-        spans.forEach((s) => s.classList.remove('leyendo'));
-        const s = spans.filter((x) => Number(x.dataset.i) <= i).pop();
-        spans.forEach((x) => { x.innerHTML = x.textContent; });
-        if (s) s.innerHTML = `<mark>${esc(s.textContent)}</mark>`;
-      },
-    });
-    spans.forEach((x) => { x.innerHTML = x.textContent; });
-    if (vivo && autoLeer && pagina === n) setTimeout(() => vivo && autoLeer && pagina === n && avanzar(), 900);
   };
 
   const avanzar = () => {
     if (n < paginas.length - 1) { n++; pintar(); sonido('clic'); }
-    else { terminar(); autoLeer = false; const a = app.querySelector('#auto'); if (a) a.checked = false; }
+    else terminar();
   };
   const retroceder = () => { if (n > 0) { n--; pintar(); } };
 
   app.querySelector('#sig').addEventListener('click', avanzar);
   app.querySelector('#ant').addEventListener('click', retroceder);
-  app.querySelector('#narrar')?.addEventListener('click', narrar);
-  app.querySelector('#auto')?.addEventListener('change', (e) => { autoLeer = e.target.checked; if (autoLeer) narrar(); });
   const cambiarZoom = (d) => {
     zoom = Math.min(1.8, Math.max(0.8, +(zoom + d).toFixed(1)));
     localStorage.setItem('mgdc:zoom', zoom);
@@ -191,5 +165,5 @@ export async function render(app, [origen, id]) {
     return () => document.removeEventListener('keydown', teclas);
   }
   pintar();
-  return () => { vivo = false; detener(); document.removeEventListener('keydown', teclas); };
+  return () => { detener(); document.removeEventListener('keydown', teclas); };
 }

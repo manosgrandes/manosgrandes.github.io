@@ -6,7 +6,6 @@ import { perfiles, progreso, medallas, todasLasMedallas } from '../../nucleo/sto
 import { SOFI } from '../../nucleo/sofi.js';
 import { icono } from '../../nucleo/iconos.js';
 import { esc } from '../../nucleo/util.js';
-import { botonLeer } from '../../nucleo/speech.js';
 import { nubeActiva } from '../../config.js';
 
 const CONSEJOS = [
@@ -60,7 +59,6 @@ export function render(vista) {
       <div>
         <p class="tab-consejo-titulo">Consejo de Sofi</p>
         <p class="tab-consejo-txt">${consejo}</p>
-        ${botonLeer(consejo)}
       </div>
     </section>
     ${r ? `<section class="tarjeta tab-progreso">
